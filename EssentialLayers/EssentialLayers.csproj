@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <OutputType>Library</OutputType>
+    <StartupObject>EssentialLayers.MainClass</StartupObject>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>Essential Layers</Title>
+    <Company>MSoto Company</Company>
+    <Product>Essential Layers</Product>
+    <Description>Essential layers to start a project from scratch with a structure designed in Dapper, Results, Cache, Error handling, Blobs, Helpers, Extensions and web requests</Description>
+    <Copyright>msotomor</Copyright>
+    <PackageIcon>essential-layers.png</PackageIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\Users\mario\OneDrive\Desktop\essential-layers.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.21.2" />
+    <PackageReference Include="Dapper" Version="2.1.35" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.1" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.0" />
+  </ItemGroup>
+
+</Project>
