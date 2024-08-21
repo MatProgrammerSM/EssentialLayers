@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 
-namespace EssentialLayersNS.Helpers.Extension
+namespace EssentialLayers.Helpers.Extension
 {
 	public static class TExtension
 	{

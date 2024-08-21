@@ -1,5 +1,5 @@
-﻿using EssentialLayersNS.Helpers.Cache;
-using EssentialLayersNS.Services.HttpService;
+﻿using EssentialLayers.Helpers.Cache;
+using EssentialLayers.Services.HttpService;
 
 namespace EssentialLayers.Helpers.Cache
 {

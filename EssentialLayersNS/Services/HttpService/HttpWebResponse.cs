@@ -1,8 +1,8 @@
-﻿using EssentialLayersNS.Helpers.Result;
+﻿using EssentialLayers.Helpers.Result;
 using System;
 using System.Net;
 
-namespace EssentialLayersNS.Services.HttpService
+namespace EssentialLayers.Services.HttpService
 {
 	public class HttpWebResponse<T>(
 		bool ok, string message, T data, HttpStatusCode httpStatusCode = HttpStatusCode.OK

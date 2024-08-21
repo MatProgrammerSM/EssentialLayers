@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace EssentialLayersNS.Helpers.Extension
+namespace EssentialLayers.Helpers.Extension
 {
 	public static class ObjectExtensions
 	{

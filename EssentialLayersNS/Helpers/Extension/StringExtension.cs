@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace EssentialLayersNS.Helpers.Extension
+namespace EssentialLayers.Helpers.Extension
 {
 	public static class StringExtension
 	{

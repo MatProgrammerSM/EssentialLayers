@@ -1,12 +1,12 @@
 ﻿using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using EssentialLayersNS.Helpers.Result;
+using EssentialLayers.Helpers.Result;
 using System;
 using System.Threading.Tasks;
 using Response = Azure.Response;
 
-namespace EssentialLayersNS.Helpers.Blob
+namespace EssentialLayers.Helpers.Blob
 {
 	public sealed class AzureBlobHelper(string connectionString)
 	{

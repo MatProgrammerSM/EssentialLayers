@@ -1,7 +1,7 @@
-﻿using EssentialLayersNS.Services.HttpService;
+﻿using EssentialLayers.Services.HttpService;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace EssentialLayersNS
+namespace EssentialLayers
 {
 	public static class Startup
 	{
