@@ -1,5 +1,4 @@
-﻿using EssentialLayers.Helpers.Cache;
-using EssentialLayers.Services.HttpService;
+﻿using EssentialLayers.Services.HttpService;
 
 namespace EssentialLayers.Helpers.Cache
 {
