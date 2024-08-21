@@ -1,7 +1,7 @@
 ﻿using EssentialLayers.Helpers.Cache;
 using EssentialLayers.Helpers.Result;
-using EssentialLayersNS.Helpers.Extension;
-using EssentialLayersNS.Helpers.Result;
+using EssentialLayers.Helpers.Extension;
+using EssentialLayers.Helpers.Result;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,7 +11,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EssentialLayersNS.Services.HttpService
+namespace EssentialLayers.Services.HttpService
 {
 	public class HttpWebService : IHttpService
 	{

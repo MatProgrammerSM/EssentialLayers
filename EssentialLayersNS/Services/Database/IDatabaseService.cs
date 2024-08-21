@@ -1,9 +1,9 @@
 ﻿using EssentialLayers.Helpers.Result;
-using EssentialLayersNS.Helpers.Result;
+using EssentialLayers.Helpers.Result;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace EssentialLayersNS.Services.Database
+namespace EssentialLayers.Services.Database
 {
 	public interface IDatabaseService
 	{

@@ -1,9 +1,9 @@
-﻿using EssentialLayersNS.Helpers.Extension;
+﻿using EssentialLayers.Helpers.Extension;
 using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Threading.Tasks;
 
-namespace EssentialLayersNS.Helpers.Cache
+namespace EssentialLayers.Helpers.Cache
 {
 	public class SimpleMemoryCache<TItem>
 	{

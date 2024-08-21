@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using EssentialLayers.Helpers.Result;
-using EssentialLayersNS.Helpers.Extension;
-using EssentialLayersNS.Helpers.Result;
+using EssentialLayers.Helpers.Extension;
+using EssentialLayers.Helpers.Result;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace EssentialLayersNS.Services.Database
+namespace EssentialLayers.Services.Database
 {
 	public class DatabaseService(string connectionString) : IDatabaseService
 	{

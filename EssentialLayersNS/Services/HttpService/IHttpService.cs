@@ -1,7 +1,7 @@
 ﻿using EssentialLayers.Helpers.Result;
 using System.Threading.Tasks;
 
-namespace EssentialLayersNS.Services.HttpService
+namespace EssentialLayers.Services.HttpService
 {
 	public interface IHttpService
 	{

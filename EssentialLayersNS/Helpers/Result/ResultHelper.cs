@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-namespace EssentialLayersNS.Helpers.Result
+namespace EssentialLayers.Helpers.Result
 {
 	public class ResultHelper<T>(bool ok, string message, T data)
 	{

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace EssentialLayersNS.Helpers.Extension
+namespace EssentialLayers.Helpers.Extension
 {
 	public static class StreamExtension
 	{
