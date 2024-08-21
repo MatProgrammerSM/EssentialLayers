@@ -13,10 +13,18 @@
     <Description>Essential layers to start a project from scratch with a structure designed in Dapper, Results, Cache, Error handling, Blobs, Helpers, Extensions and web requests</Description>
     <Copyright>msotomor</Copyright>
     <PackageIcon>essential-layers.png</PackageIcon>
+    <RepositoryUrl>https://github.com/MatProgrammerSM/EssentialLayers</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>Dapper Results Cache Error Handling Blobs Helpers Exstension Web-Requests</PackageTags>
+    <PackageReadmeFile>Readme.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\..\Users\mario\OneDrive\Desktop\essential-layers.png">
+    <None Include="..\shared\essential-layers.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\shared\Readme.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
