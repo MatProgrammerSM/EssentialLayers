@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 
 namespace EssentialLayers.Helpers.Extension
@@ -51,6 +52,20 @@ namespace EssentialLayers.Helpers.Extension
 			int value = DateTime.Compare(DEFAULT, datetime);
 
 			return value == 0 ? string.Empty : date;
+		}
+
+		public static string StringDay(this DateTime dateTime, string culture = "es-MX")
+		{
+			CultureInfo cultureInfo = new(culture);
+
+			return dateTime.ToString("dddd", cultureInfo);
+		}
+
+		public static string StringMonth(this DateTime dateTime, string culture = "es-MX")
+		{
+			CultureInfo cultureInfo = new(culture);
+
+			return dateTime.ToString("MMMM", cultureInfo);
 		}
 	}
 }
