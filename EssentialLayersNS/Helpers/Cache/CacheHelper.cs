@@ -1,9 +1,8 @@
-﻿using EssentialLayers.Helpers.Cache;
-using EssentialLayers.Services.HttpService;
+﻿using EssentialLayers.Helpers.Http;
 
 namespace EssentialLayers.Helpers.Cache
 {
-	public abstract class CacheHelper<TResult>
+    public abstract class CacheHelper<TResult>
 	{
 		public static readonly SimpleMemoryCache<HttpWebResponse<TResult>> HttpWebResponseCache = new();
 	}

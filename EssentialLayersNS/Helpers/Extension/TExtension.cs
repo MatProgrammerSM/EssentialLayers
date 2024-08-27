@@ -135,7 +135,7 @@ namespace EssentialLayers.Helpers.Extension
 			{"System.DateTimeOffset", DbType.DateTimeOffset}
 		};
 
-		public static bool NotEquals<T, K>(this T? self, K? other)
+		public static bool NotEquals<T, K>(this T self, K other)
 		{
 			return !self.Equals(other);
 		}
