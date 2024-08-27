@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using static Dapper.SqlMapper;
 
@@ -18,7 +17,7 @@ namespace EssentialLayers.Helpers.Database
 
 		public ResultHelper<TResult> Get<TResult, TRequest>(
 			TRequest request, string storeProcedure
-		) where TResult : Response
+		)
 		{
 			using SqlConnection sqlConnection = new(ConnectionString);
 
@@ -33,11 +32,7 @@ namespace EssentialLayers.Helpers.Database
 					commandType: CommandType.StoredProcedure
 				);
 
-				bool isValid = query!.SearchProperty<bool>(nameof(Response.Ok));
-				string message = query!.SearchProperty<string>(nameof(Response.Message));
-
-				if (isValid) result = ResultHelper<TResult>.Success(query);
-				else result = ResultHelper<TResult>.Fail(message);
+				result = ResultHelper<TResult>.Success(query);
 			}
 			catch (Exception e)
 			{
@@ -53,7 +48,7 @@ namespace EssentialLayers.Helpers.Database
 
 		public ResultHelper<IEnumerable<TResult>> GetAll<TResult, TRequest>(
 			TRequest request, string storeProcedure
-		) where TResult : Response
+		)
 		{
 			using SqlConnection sqlConnection = new(ConnectionString);
 
@@ -68,11 +63,7 @@ namespace EssentialLayers.Helpers.Database
 					commandType: CommandType.StoredProcedure
 				);
 
-				bool isValid = query!.SearchProperty<bool>(nameof(Response.Ok));
-				string message = query!.SearchProperty<string>(nameof(Response.Message));
-
-				if (isValid) result = ResultHelper<IEnumerable<TResult>>.Success(query);
-				else result = ResultHelper<IEnumerable<TResult>>.Fail(message);
+				result = ResultHelper<IEnumerable<TResult>>.Success(query);
 			}
 			catch (Exception e)
 			{
@@ -88,7 +79,7 @@ namespace EssentialLayers.Helpers.Database
 
 		public async Task<ResultHelper<IEnumerable<TResult>>> GetAllAsync<TResult, TRequest>(
 			TRequest request, string storeProcedure
-		) where TResult : Response
+		)
 		{
 			await using SqlConnection sqlConnection = new(ConnectionString);
 
@@ -103,11 +94,7 @@ namespace EssentialLayers.Helpers.Database
 					commandType: CommandType.StoredProcedure
 				);
 
-				bool isValid = query!.SearchProperty<bool>(nameof(Response.Ok));
-				string message = query!.SearchProperty<string>(nameof(Response.Message));
-
-				if (isValid) result = ResultHelper<IEnumerable<TResult>>.Success(query);
-				else result = ResultHelper<IEnumerable<TResult>>.Fail(message);
+				result = ResultHelper<IEnumerable<TResult>>.Success(query);
 			}
 			catch (Exception e)
 			{
@@ -123,7 +110,7 @@ namespace EssentialLayers.Helpers.Database
 
 		public async Task<ResultHelper<TResult>> GetAsync<TResult, TRequest>(
 			TRequest request, string storeProcedure
-		) where TResult : Response
+		)
 		{
 			await using SqlConnection sqlConnection = new(ConnectionString);
 
@@ -138,11 +125,7 @@ namespace EssentialLayers.Helpers.Database
 					commandType: CommandType.StoredProcedure
 				);
 
-				bool isValid = query!.SearchProperty<bool>(nameof(Response.Ok));
-				string message = query!.SearchProperty<string>(nameof(Response.Message));
-
-				if (isValid) result = ResultHelper<TResult>.Success(query);
-				else result = ResultHelper<TResult>.Fail(message);
+				result = ResultHelper<TResult>.Success(query);
 			}
 			catch (Exception e)
 			{
@@ -276,7 +259,7 @@ namespace EssentialLayers.Helpers.Database
 			using (SqlConnection sqlConnection = new(ConnectionString))
 			{
 				using SqlCommand command = new(storeProcedure, sqlConnection);
-				
+
 				SqlParameter[] sqlParameters = dynamicParameters.ParseSqlParameters();
 
 				command.Parameters.AddRange(sqlParameters);
@@ -414,7 +397,7 @@ namespace EssentialLayers.Helpers.Database
 		{
 			ResultHelper<IEnumerable<IEnumerable<dynamic>>> result = ResultHelper<IEnumerable<IEnumerable<dynamic>>>.Success([]);
 			using SqlConnection sqlConnection = new(ConnectionString);
-			
+
 			try
 			{
 				List<IEnumerable<dynamic>> resultSets = [];

@@ -148,5 +148,18 @@ namespace EssentialLayers.Helpers.Extension
 
 			return self.Length <= length ? self.PadLeft(length) : self[..length];
 		}
+
+		public static string RemoveDiacritics(this string self)
+		{
+			char[] replacement = ['a', 'a', 'e', 'e', 'i', 'i', 'n', 'o', 'o', 'A', 'E', 'I', 'O', 'U'];
+			char[] accents = ['à', 'á', 'é', 'è', 'ì', 'í', 'ñ', 'ò', 'ó', 'Á', 'É', 'Í', 'Ó', 'Ú'];
+
+			for (int i = 0; i < accents.Length; i++)
+			{
+				self = self.Replace(accents[i], replacement[i]);
+			}
+
+			return self;
+		}
 	}
 }

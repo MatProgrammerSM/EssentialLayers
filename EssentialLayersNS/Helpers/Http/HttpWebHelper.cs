@@ -1,6 +1,5 @@
 ﻿using EssentialLayers.Helpers.Cache;
 using EssentialLayers.Helpers.Extension;
-using EssentialLayers.Helpers.Result;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace EssentialLayers.Helpers.Http
 {
-    public class HttpWebHelper
+	public class HttpWebHelper
     {
         private readonly HttpClient HttpClient = new(
             new HttpClientHandler
@@ -23,7 +22,7 @@ namespace EssentialLayers.Helpers.Http
 
         public async Task<HttpWebResponse<TResult>> GetAsync<TResult, TRequest>(
             TRequest request, string url, RequestOptions options = null
-        ) where TResult : Response
+        )
         {
             try
             {
@@ -66,7 +65,7 @@ namespace EssentialLayers.Helpers.Http
 
         public async Task<HttpWebResponse<TResult>> PostAsync<TResult, TRequest>(
             TRequest request, string url, RequestOptions options = null
-        ) where TResult : Response
+        )
         {
             try
             {
@@ -108,7 +107,7 @@ namespace EssentialLayers.Helpers.Http
         private async Task<HttpWebResponse<TResult>> SendAsync<TResult, TRequest>(
             TRequest request, string url, HttpMethod httpMethod,
             RequestOptions options
-        ) where TResult : Response
+        )
         {
             string jsonRequest = request.Serialize();
 
@@ -145,26 +144,16 @@ namespace EssentialLayers.Helpers.Http
 
         private static HttpWebResponse<TResult> ManageResponse<TResult>(
             HttpStatusCode httpStatusCode, string response
-        ) where TResult : Response
+        )
         {
             switch (httpStatusCode)
             {
                 case HttpStatusCode.OK:
                 case HttpStatusCode.BadRequest:
 
-                    ResultHelper<TResult> result = response.Deserialize<ResultHelper<TResult>>();
+                    TResult result = response.Deserialize<TResult>();
 
-                    if (result.Ok)
-                    {
-                        bool isSuccess = result.SearchProperty<bool>(nameof(Response.Ok));
-                        string message = result.SearchProperty<string>(nameof(Response.Message));
-
-                        if (isSuccess) return HttpWebResponse<TResult>.Success(result.Data, httpStatusCode);
-
-                        return HttpWebResponse<TResult>.Fail(message, httpStatusCode);
-                    }
-
-                    return HttpWebResponse<TResult>.Fail(result.Message, httpStatusCode);
+                    return HttpWebResponse<TResult>.Success(result, httpStatusCode);
 
                 case HttpStatusCode.NotFound:
 
