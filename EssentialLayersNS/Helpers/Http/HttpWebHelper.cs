@@ -13,12 +13,20 @@ namespace EssentialLayers.Helpers.Http
 {
 	public class HttpWebHelper
     {
-        private readonly HttpClient HttpClient = new(
+		private static HttpWebHelper get;
+
+		private readonly HttpClient HttpClient = new(
             new HttpClientHandler
             {
                 ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; }
             }
         );
+        
+        /**/
+		
+        public static HttpWebHelper Get => get ??= new HttpWebHelper();
+
+        /**/
 
         public async Task<HttpWebResponse<TResult>> GetAsync<TResult, TRequest>(
             TRequest request, string url, RequestOptions options = null

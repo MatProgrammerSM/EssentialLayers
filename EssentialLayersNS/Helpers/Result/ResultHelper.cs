@@ -1,5 +1,5 @@
-﻿using System;
-using System.Diagnostics;
+﻿using EssentialLayers.Helpers.Logger;
+using System;
 using System.Runtime.CompilerServices;
 
 namespace EssentialLayers.Helpers.Result
@@ -27,8 +27,8 @@ namespace EssentialLayers.Helpers.Result
 
 			if (ErrorMessages.Messages.TryGetValue(type, out string userMessage))
 			{
-				Debug.WriteLine(
-					$" ResultHelper - File: {file} | Member: {member} | Line Number: {lineNumber} - [{e.Message}]"
+				LoggerHelper.Error(
+					e, $" ResultHelper - File: {file} | Member: {member} | Line Number: {lineNumber} - [{e.Message}]"
 				);
 
 				if (userMessage != null) return new ResultHelper<T>(false, userMessage, default!);
