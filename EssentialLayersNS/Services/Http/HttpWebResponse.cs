@@ -2,7 +2,7 @@
 using System;
 using System.Net;
 
-namespace EssentialLayers.Helpers.Http
+namespace EssentialLayers.Services.Http
 {
 	public class HttpWebResponse<T>(
 		bool ok, string message, T data, HttpStatusCode httpStatusCode = HttpStatusCode.OK

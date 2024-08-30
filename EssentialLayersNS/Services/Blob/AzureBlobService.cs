@@ -1,6 +1,7 @@
 ﻿using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using EssentialLayers.Helpers.Extension;
 using EssentialLayers.Helpers.Result;
 using System;
 using System.Collections.Generic;
@@ -8,16 +9,30 @@ using System.IO;
 using System.Threading.Tasks;
 using Response = Azure.Response;
 
-namespace EssentialLayers.Helpers.Blob
+namespace EssentialLayers.Services.Blob
 {
-	public sealed class AzureBlobHelper(string connectionString)
+	internal class AzureBlobService : IAzureBlobService
 	{
-		private readonly BlobServiceClient BlobServiceClient = new(connectionString);
+		private BlobServiceClient BlobServiceClient;
+
+		private string ConnectionString;
+
+		public void Set(string connectionString)
+		{
+			ConnectionString = connectionString;
+			BlobServiceClient = new(connectionString);
+		}
 
 		public async Task<ResultHelper<string>> UploadFileAsync(
 			string fileName, string container, byte[] bytes
 		)
 		{
+			ResultHelper<string> result = ValidateConnectionString(
+				string.Empty, ConnectionString
+			);
+
+			if (result.Ok.False()) return result;
+
 			try
 			{
 				BlobContainerClient blobContainerClient = BlobServiceClient.GetBlobContainerClient(container);
@@ -25,9 +40,9 @@ namespace EssentialLayers.Helpers.Blob
 				BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
 				BinaryData binaryData = new(bytes);
 
-				Response<BlobContentInfo> result = await blobClient.UploadAsync(binaryData, true);
+				Response<BlobContentInfo> uplaod = await blobClient.UploadAsync(binaryData, true);
 
-				if (result.Value != null) return ResultHelper<string>.Success(
+				if (uplaod.Value != null) return ResultHelper<string>.Success(
 					$"{blobClient.Uri.AbsoluteUri}"
 				);
 				else return ResultHelper<string>.Fail(
@@ -44,6 +59,12 @@ namespace EssentialLayers.Helpers.Blob
 			string filepath, string container
 		)
 		{
+			ResultHelper<string> result = ValidateConnectionString(
+				string.Empty, ConnectionString
+			);
+
+			if (result.Ok.False()) return result;
+
 			try
 			{
 				BlobContainerClient blobContainerClient = BlobServiceClient.GetBlobContainerClient(container);
@@ -63,15 +84,21 @@ namespace EssentialLayers.Helpers.Blob
 			string filepath, string container
 		)
 		{
+			ResultHelper<string> result = ValidateConnectionString(
+				string.Empty, ConnectionString
+			);
+
+			if (result.Ok.False()) return result;
+
 			try
 			{
 				BlobContainerClient blobContainerClient = BlobServiceClient.GetBlobContainerClient(container);
 
 				BlobClient blobClient = blobContainerClient.GetBlobClient(filepath);
 
-				using Response result = await blobClient.DownloadToAsync(filepath);
+				using Response download = await blobClient.DownloadToAsync(filepath);
 
-				if (!result.IsError) return ResultHelper<string>.Success(
+				if (!download.IsError) return ResultHelper<string>.Success(
 					$"{blobClient.Uri.AbsoluteUri}"
 				);
 				else return ResultHelper<string>.Fail("It wasn't possible dowloaded the file");
@@ -86,6 +113,12 @@ namespace EssentialLayers.Helpers.Blob
 			string filepath, string container
 		)
 		{
+			ResultHelper<byte[]> result = ValidateConnectionString<byte[]>(
+				[], ConnectionString
+			);
+
+			if (result.Ok.False()) return result;
+
 			try
 			{
 				BlobContainerClient blobContainerClient = BlobServiceClient.GetBlobContainerClient(container);
@@ -93,9 +126,9 @@ namespace EssentialLayers.Helpers.Blob
 
 				await using MemoryStream memoryStream = new();
 
-				using Response result = await blobClient.DownloadToAsync(memoryStream);
+				using Response download = await blobClient.DownloadToAsync(memoryStream);
 
-				if (!result.IsError) return ResultHelper<byte[]>.Success(
+				if (!download.IsError) return ResultHelper<byte[]>.Success(
 					memoryStream.ToArray()
 				);
 				else return ResultHelper<byte[]>.Fail(
@@ -112,12 +145,18 @@ namespace EssentialLayers.Helpers.Blob
 			string filepath, string container
 		)
 		{
+			ResultHelper<bool> result = ValidateConnectionString(
+				true, ConnectionString
+			);
+
+			if (result.Ok.False()) return result;
+
 			try
 			{
 				BlobContainerClient blobContainerClient = BlobServiceClient.GetBlobContainerClient(container);
-				Response<bool> result = await blobContainerClient.DeleteBlobIfExistsAsync(filepath);
+				Response<bool> deleted = await blobContainerClient.DeleteBlobIfExistsAsync(filepath);
 
-				if (result) return ResultHelper<bool>.Success(true);
+				if (deleted) return ResultHelper<bool>.Success(true);
 				else return ResultHelper<bool>.Fail(
 					"It wasn't possible dowloaded the file"
 				);
@@ -128,21 +167,47 @@ namespace EssentialLayers.Helpers.Blob
 			}
 		}
 
-		public async Task<HashSet<BlobItem>> ListContainersAsync(
+		public async Task<ResultHelper<HashSet<BlobItem>>> ListContainersAsync(
 			string container, string prefix
 		)
 		{
-			BlobContainerClient blobContainerClient = BlobServiceClient.GetBlobContainerClient(container);
-			AsyncPageable<BlobItem> blobItems = blobContainerClient.GetBlobsAsync(prefix: prefix);
+			ResultHelper<HashSet<BlobItem>> result = ValidateConnectionString<HashSet<BlobItem>>(
+				[], ConnectionString
+			);
 
-			HashSet<BlobItem> result = [];
+			if (result.Ok.False()) return result;
 
-			await foreach (BlobItem blobItem in blobItems)
+			try
 			{
-				result.Add(blobItem);
-			}
+				BlobContainerClient blobContainerClient = BlobServiceClient.GetBlobContainerClient(container);
+				AsyncPageable<BlobItem> blobItems = blobContainerClient.GetBlobsAsync(prefix: prefix);
 
-			return result;
+				HashSet<BlobItem> hashSet = [];
+
+				await foreach (BlobItem blobItem in blobItems)
+				{
+					hashSet.Add(blobItem);
+				}
+
+				return ResultHelper<HashSet<BlobItem>>.Success(hashSet);
+			}
+			catch (Exception e)
+			{
+				return ResultHelper<HashSet<BlobItem>>.Fail(e);
+			}
+		}
+
+		private ResultHelper<TResult> ValidateConnectionString<TResult>(
+			TResult result, string connectionString
+		)
+		{
+			bool isEmpty = connectionString.IsEmpty();
+
+			if (isEmpty) return ResultHelper<TResult>.Fail(
+				"The connection string wasn't initilized yet"
+			);
+
+			return ResultHelper<TResult>.Success(result);
 		}
 	}
 }

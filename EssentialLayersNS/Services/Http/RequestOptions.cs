@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 
-namespace EssentialLayers.Helpers.Http
+namespace EssentialLayers.Services.Http
 {
-	public class RequestOptions(bool isCached = false)
+    public class RequestOptions(bool isCached = false)
     {
         public IDictionary<string, string> Headers { get; set; } = new Dictionary<string, string>();
 

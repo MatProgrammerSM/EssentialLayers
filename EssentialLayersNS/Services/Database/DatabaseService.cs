@@ -9,21 +9,30 @@ using System.Linq;
 using System.Threading.Tasks;
 using static Dapper.SqlMapper;
 
-namespace EssentialLayers.Helpers.Database
+namespace EssentialLayers.Services.Database
 {
-	public class DatabaseHelper(string connectionString)
+	internal class DatabaseService : IDatabaseService
 	{
-		private readonly string ConnectionString = connectionString;
+		private string ConnectionString;
 
 		/**/
+
+		public void SetConnectionString(string connectionString)
+		{
+			ConnectionString = connectionString;
+		}
 
 		public ResultHelper<TResult> Execute<TResult, TRequest>(
 			TRequest request, string storedProcedure
 		)
 		{
-			using SqlConnection sqlConnection = new(ConnectionString);
+			ResultHelper<TResult> result = ValidateConnectionString(
+				Activator.CreateInstance<TResult>(), ConnectionString
+			);
 
-			ResultHelper<TResult> result;
+			if (result.Ok.False()) return result;
+
+			using SqlConnection sqlConnection = new(ConnectionString);
 
 			try
 			{
@@ -54,7 +63,11 @@ namespace EssentialLayers.Helpers.Database
 		{
 			await using SqlConnection sqlConnection = new(ConnectionString);
 
-			ResultHelper<TResult> result;
+			ResultHelper<TResult> result = ValidateConnectionString(
+				Activator.CreateInstance<TResult>(), ConnectionString
+			);
+
+			if (result.Ok.False()) return result;
 
 			try
 			{
@@ -85,7 +98,11 @@ namespace EssentialLayers.Helpers.Database
 		{
 			using SqlConnection sqlConnection = new(ConnectionString);
 
-			ResultHelper<IEnumerable<TResult>> result;
+			ResultHelper<IEnumerable<TResult>> result = ValidateConnectionString<IEnumerable<TResult>>(
+				[], ConnectionString
+			);
+
+			if (result.Ok.False()) return result;
 
 			try
 			{
@@ -116,7 +133,11 @@ namespace EssentialLayers.Helpers.Database
 		{
 			await using SqlConnection sqlConnection = new(ConnectionString);
 
-			ResultHelper<IEnumerable<TResult>> result;
+			ResultHelper<IEnumerable<TResult>> result = ValidateConnectionString<IEnumerable<TResult>>(
+				[], ConnectionString
+			);
+
+			if (result.Ok.False()) return result;
 
 			try
 			{
@@ -145,7 +166,11 @@ namespace EssentialLayers.Helpers.Database
 			TRequest request, string storedProcedure
 		)
 		{
-			ResultHelper<TResult> result = ResultHelper<TResult>.Success(Activator.CreateInstance<TResult>());
+			ResultHelper<TResult> result = ValidateConnectionString(
+				Activator.CreateInstance<TResult>(), ConnectionString
+			);
+
+			if (result.Ok.False()) return result;
 
 			using (SqlConnection sqlConnection = new(ConnectionString))
 			{
@@ -184,7 +209,11 @@ namespace EssentialLayers.Helpers.Database
 			TRequest request, string storedProcedure
 		)
 		{
-			ResultHelper<TResult> result = ResultHelper<TResult>.Success(Activator.CreateInstance<TResult>());
+			ResultHelper<TResult> result = ValidateConnectionString(
+				Activator.CreateInstance<TResult>(), ConnectionString
+			);
+
+			if (result.Ok.False()) return result;
 
 			using (SqlConnection sqlConnection = new(ConnectionString))
 			{
@@ -223,7 +252,11 @@ namespace EssentialLayers.Helpers.Database
 			TRequest request, string storedProcedure
 		)
 		{
-			ResultHelper<IEnumerable<TResult>> result = ResultHelper<IEnumerable<TResult>>.Success([]);
+			ResultHelper<IEnumerable<TResult>> result = ValidateConnectionString<IEnumerable<TResult>>(
+				[], ConnectionString
+			);
+
+			if (result.Ok.False()) return result;
 
 			using (SqlConnection sqlConnection = new(ConnectionString))
 			{
@@ -262,7 +295,11 @@ namespace EssentialLayers.Helpers.Database
 			TRequest request, string storedProcedure
 		)
 		{
-			ResultHelper<IEnumerable<TResult>> result = ResultHelper<IEnumerable<TResult>>.Success([]);
+			ResultHelper<IEnumerable<TResult>> result = ValidateConnectionString<IEnumerable<TResult>>(
+				[], ConnectionString
+			);
+
+			if (result.Ok.False()) return result;
 
 			using (SqlConnection sqlConnection = new(ConnectionString))
 			{
@@ -297,12 +334,16 @@ namespace EssentialLayers.Helpers.Database
 			return result;
 		}
 
-
 		public ResultHelper<IEnumerable<IEnumerable<dynamic>>> QueryMultiple<TRequest>(
 			TRequest request, string storedProcedure
 		)
 		{
-			ResultHelper<IEnumerable<IEnumerable<dynamic>>> result = ResultHelper<IEnumerable<IEnumerable<dynamic>>>.Success([]);
+			ResultHelper<IEnumerable<IEnumerable<dynamic>>> result = ValidateConnectionString<IEnumerable<IEnumerable<dynamic>>>(
+				[], ConnectionString
+			);
+
+			if (result.Ok.False()) return result;
+
 			DynamicParameters dynamicParameters = request.ParseDynamicParameters();
 
 			using SqlConnection sqlConnection = new(ConnectionString);
@@ -338,7 +379,12 @@ namespace EssentialLayers.Helpers.Database
 			TRequest request, string storedProcedure
 		)
 		{
-			ResultHelper<IEnumerable<IEnumerable<dynamic>>> result = ResultHelper<IEnumerable<IEnumerable<dynamic>>>.Success([]);
+			ResultHelper<IEnumerable<IEnumerable<dynamic>>> result = ValidateConnectionString<IEnumerable<IEnumerable<dynamic>>>(
+				[], ConnectionString
+			);
+
+			if (result.Ok.False()) return result;
+
 			DynamicParameters dynamicParameters = request.ParseDynamicParameters();
 
 			using SqlConnection sqlConnection = new(ConnectionString);
@@ -368,6 +414,19 @@ namespace EssentialLayers.Helpers.Database
 			}
 
 			return result;
+		}
+
+		private ResultHelper<TResult> ValidateConnectionString<TResult>(
+			TResult result, string connectionString
+		)
+		{
+			bool isEmpty = connectionString.IsEmpty();
+
+			if (isEmpty) return ResultHelper<TResult>.Fail(
+				"The connection string wasn't initilized yet"
+			);
+
+			return ResultHelper<TResult>.Success(result);
 		}
 	}
 }

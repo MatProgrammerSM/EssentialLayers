@@ -1,5 +1,6 @@
 ﻿using EssentialLayers.Helpers.Cache;
 using EssentialLayers.Helpers.Extension;
+using EssentialLayers.Helpers.Result;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,9 +10,9 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EssentialLayers.Helpers.Http
+namespace EssentialLayers.Services.Http
 {
-	public class HttpWebHelper
+	internal class HttpWebService : IHttpWebService
 	{
 		private readonly HttpClient HttpClient = new(
 			new HttpClientHandler
@@ -22,9 +23,14 @@ namespace EssentialLayers.Helpers.Http
 
 		/**/
 
-		public HttpWebHelperOption httpWebHelperOption = new();
+		private HttpWebHelperOption HttpWebHelperOption;
 
 		/**/
+
+		public void SetOptions(HttpWebHelperOption httpWebHelperOption)
+		{
+			HttpWebHelperOption = httpWebHelperOption;
+		}
 
 
 		public async Task<HttpWebResponse<TResult>> GetAsync<TResult, TRequest>(
@@ -36,7 +42,7 @@ namespace EssentialLayers.Helpers.Http
 				options ??= new RequestOptions();
 
 				HttpClient.DefaultRequestHeaders.UserAgent.ParseAdd(
-					$"{httpWebHelperOption.AppName}/{httpWebHelperOption.AppVersion}"
+					$"{HttpWebHelperOption.AppName}/{HttpWebHelperOption.AppVersion}"
 				);
 
 				foreach (KeyValuePair<string, string> header in options.Headers!)
@@ -79,7 +85,7 @@ namespace EssentialLayers.Helpers.Http
 				options ??= new RequestOptions();
 
 				HttpClient.DefaultRequestHeaders.UserAgent.ParseAdd(
-					$"{httpWebHelperOption.AppName}/{httpWebHelperOption.AppVersion}"
+					$"{HttpWebHelperOption.AppName}/{HttpWebHelperOption.AppVersion}"
 				);
 
 				foreach (KeyValuePair<string, string> header in options.Headers!)
@@ -117,7 +123,7 @@ namespace EssentialLayers.Helpers.Http
 		)
 		{
 			string jsonRequest = request.Serialize();
-			string bearerToken = httpWebHelperOption.BearerToken.NotEmpty() ? httpWebHelperOption.BearerToken : options.BearerToken;
+			string bearerToken = HttpWebHelperOption.BearerToken.NotEmpty() ? HttpWebHelperOption.BearerToken : options.BearerToken;
 
 			Debug.WriteLine($"HttpService -> Request Method [{httpMethod.Method}]: URL [ {url} ], JSON [ {jsonRequest} ] ");
 
@@ -159,9 +165,13 @@ namespace EssentialLayers.Helpers.Http
 				case HttpStatusCode.OK:
 				case HttpStatusCode.BadRequest:
 
-					TResult result = response.Deserialize<TResult>();
+					ResultHelper<TResult> result = response.Deserialize<ResultHelper<TResult>>();
 
-					return HttpWebResponse<TResult>.Success(result, httpStatusCode);
+					if (result.Ok.False()) return HttpWebResponse<TResult>.Fail(
+						result.Message, httpStatusCode
+					);
+
+					return HttpWebResponse<TResult>.Success(result.Data, httpStatusCode);
 
 				case HttpStatusCode.NotFound:
 
