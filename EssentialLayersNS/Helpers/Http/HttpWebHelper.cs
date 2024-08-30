@@ -12,179 +12,179 @@ using System.Threading.Tasks;
 namespace EssentialLayers.Helpers.Http
 {
 	public class HttpWebHelper
-    {
-		private static HttpWebHelper get;
-
+	{
 		private readonly HttpClient HttpClient = new(
-            new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; }
-            }
-        );
-        
-        /**/
-		
-        public static HttpWebHelper Get => get ??= new HttpWebHelper();
+			new HttpClientHandler
+			{
+				ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; }
+			}
+		);
 
-        /**/
+		/**/
 
-        public async Task<HttpWebResponse<TResult>> GetAsync<TResult, TRequest>(
-            TRequest request, string url, RequestOptions options = null
-        )
-        {
-            try
-            {
-                options ??= new RequestOptions();
+		public HttpWebHelperOption httpWebHelperOption = new();
 
-                HttpClient.DefaultRequestHeaders.UserAgent.ParseAdd(
-                    $"{options.AppName}/{options.AppVersion}"
-                );
+		/**/
 
-                foreach (KeyValuePair<string, string> header in options.Headers!)
-                {
-                    HttpClient.DefaultRequestHeaders.Add(
-                        header.Key, header.Value
-                    );
-                }
 
-                if (options.IsCached)
-                {
-                    string key = request.Serialize();
+		public async Task<HttpWebResponse<TResult>> GetAsync<TResult, TRequest>(
+			TRequest request, string url, RequestOptions options = null
+		)
+		{
+			try
+			{
+				options ??= new RequestOptions();
 
-                    HttpWebResponse<TResult> resultCache = await CacheHelper<TResult>.HttpWebResponseCache.GetOrCreate(
-                        key, async () => await SendAsync<TResult, TRequest>(
-                            request, url, HttpMethod.Get, options
-                        )
-                    );
+				HttpClient.DefaultRequestHeaders.UserAgent.ParseAdd(
+					$"{httpWebHelperOption.AppName}/{httpWebHelperOption.AppVersion}"
+				);
 
-                    return resultCache;
-                }
-                else return await SendAsync<TResult, TRequest>(
-                    request, url, HttpMethod.Get, options
-                );
-            }
-            catch (Exception e)
-            {
-                return HttpWebResponse<TResult>.Fail(
-                    e, HttpStatusCode.InternalServerError
-                );
-            }
-        }
+				foreach (KeyValuePair<string, string> header in options.Headers!)
+				{
+					HttpClient.DefaultRequestHeaders.Add(
+						header.Key, header.Value
+					);
+				}
 
-        public async Task<HttpWebResponse<TResult>> PostAsync<TResult, TRequest>(
-            TRequest request, string url, RequestOptions options = null
-        )
-        {
-            try
-            {
-                options ??= new RequestOptions();
+				if (options.IsCached)
+				{
+					string key = request.Serialize();
 
-                HttpClient.DefaultRequestHeaders.UserAgent.ParseAdd(
-                    $"{options.AppName}/{options.AppVersion}"
-                );
+					HttpWebResponse<TResult> resultCache = await CacheHelper<TResult>.HttpWebResponseCache.GetOrCreate(
+						key, async () => await SendAsync<TResult, TRequest>(
+							request, url, HttpMethod.Get, options
+						)
+					);
 
-                foreach (KeyValuePair<string, string> header in options.Headers!)
-                {
-                    HttpClient.DefaultRequestHeaders.Add(header.Key, header.Value);
-                }
+					return resultCache;
+				}
+				else return await SendAsync<TResult, TRequest>(
+					request, url, HttpMethod.Get, options
+				);
+			}
+			catch (Exception e)
+			{
+				return HttpWebResponse<TResult>.Fail(
+					e, HttpStatusCode.InternalServerError
+				);
+			}
+		}
 
-                if (options.IsCached)
-                {
-                    string key = request.Serialize();
+		public async Task<HttpWebResponse<TResult>> PostAsync<TResult, TRequest>(
+			TRequest request, string url, RequestOptions options = null
+		)
+		{
+			try
+			{
+				options ??= new RequestOptions();
 
-                    HttpWebResponse<TResult> resultCache = await CacheHelper<TResult>.HttpWebResponseCache.GetOrCreate(
-                        key, async () => await SendAsync<TResult, TRequest>(
-                            request, url, HttpMethod.Post, options
-                        )
-                    );
+				HttpClient.DefaultRequestHeaders.UserAgent.ParseAdd(
+					$"{httpWebHelperOption.AppName}/{httpWebHelperOption.AppVersion}"
+				);
 
-                    return resultCache;
-                }
-                else return await SendAsync<TResult, TRequest>(
-                    request, url, HttpMethod.Post, options
-                );
-            }
-            catch (Exception e)
-            {
-                return HttpWebResponse<TResult>.Fail(
-                    e, HttpStatusCode.InternalServerError
-                );
-            }
-        }
+				foreach (KeyValuePair<string, string> header in options.Headers!)
+				{
+					HttpClient.DefaultRequestHeaders.Add(header.Key, header.Value);
+				}
 
-        private async Task<HttpWebResponse<TResult>> SendAsync<TResult, TRequest>(
-            TRequest request, string url, HttpMethod httpMethod,
-            RequestOptions options
-        )
-        {
-            string jsonRequest = request.Serialize();
+				if (options.IsCached)
+				{
+					string key = request.Serialize();
 
-            Debug.WriteLine($"HttpService -> Request Method [{httpMethod.Method}]: URL [ {url} ], JSON [ {jsonRequest} ] ");
+					HttpWebResponse<TResult> resultCache = await CacheHelper<TResult>.HttpWebResponseCache.GetOrCreate(
+						key, async () => await SendAsync<TResult, TRequest>(
+							request, url, HttpMethod.Post, options
+						)
+					);
 
-            using HttpRequestMessage httpRequestMessage = new()
-            {
-                Content = new StringContent(jsonRequest, Encoding.UTF8),
-                RequestUri = new Uri(url),
-                Method = httpMethod
-            };
+					return resultCache;
+				}
+				else return await SendAsync<TResult, TRequest>(
+					request, url, HttpMethod.Post, options
+				);
+			}
+			catch (Exception e)
+			{
+				return HttpWebResponse<TResult>.Fail(
+					e, HttpStatusCode.InternalServerError
+				);
+			}
+		}
 
-            httpRequestMessage.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
-            httpRequestMessage.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
+		private async Task<HttpWebResponse<TResult>> SendAsync<TResult, TRequest>(
+			TRequest request, string url, HttpMethod httpMethod,
+			RequestOptions options
+		)
+		{
+			string jsonRequest = request.Serialize();
+			string bearerToken = httpWebHelperOption.BearerToken.NotEmpty() ? httpWebHelperOption.BearerToken : options.BearerToken;
 
-            if (!string.IsNullOrEmpty(options.BearerToken))
-            {
-                httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue(
-                    "Bearer", options.BearerToken
-                );
-            }
+			Debug.WriteLine($"HttpService -> Request Method [{httpMethod.Method}]: URL [ {url} ], JSON [ {jsonRequest} ] ");
 
-            HttpResponseMessage httpResponseMessage = await HttpClient.SendAsync(
-                httpRequestMessage, options.CancellationToken
-            );
+			using HttpRequestMessage httpRequestMessage = new()
+			{
+				Content = new StringContent(jsonRequest, Encoding.UTF8),
+				RequestUri = new Uri(url),
+				Method = httpMethod
+			};
 
-            string response = await httpResponseMessage.Content.ReadAsStringAsync();
-            string jsonResponse = response.Serialize();
+			httpRequestMessage.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+			httpRequestMessage.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
 
-            Debug.WriteLine($"HttpService -> Response Method [{httpMethod.Method}]: URL [ {url} ], JSON [ {jsonResponse} ] ");
+			if (!string.IsNullOrEmpty(options.BearerToken))
+			{
+				httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue(
+					"Bearer", bearerToken
+				);
+			}
 
-            return ManageResponse<TResult>(httpResponseMessage.StatusCode, response);
-        }
+			HttpResponseMessage httpResponseMessage = await HttpClient.SendAsync(
+				httpRequestMessage, options.CancellationToken
+			);
 
-        private static HttpWebResponse<TResult> ManageResponse<TResult>(
-            HttpStatusCode httpStatusCode, string response
-        )
-        {
-            switch (httpStatusCode)
-            {
-                case HttpStatusCode.OK:
-                case HttpStatusCode.BadRequest:
+			string response = await httpResponseMessage.Content.ReadAsStringAsync();
+			string jsonResponse = response.Serialize();
 
-                    TResult result = response.Deserialize<TResult>();
+			Debug.WriteLine($"HttpService -> Response Method [{httpMethod.Method}]: URL [ {url} ], JSON [ {jsonResponse} ] ");
 
-                    return HttpWebResponse<TResult>.Success(result, httpStatusCode);
+			return ManageResponse<TResult>(httpResponseMessage.StatusCode, response);
+		}
 
-                case HttpStatusCode.NotFound:
+		private static HttpWebResponse<TResult> ManageResponse<TResult>(
+			HttpStatusCode httpStatusCode, string response
+		)
+		{
+			switch (httpStatusCode)
+			{
+				case HttpStatusCode.OK:
+				case HttpStatusCode.BadRequest:
 
-                    return HttpWebResponse<TResult>.Fail(
-                        "The request method not found", httpStatusCode
-                    );
+					TResult result = response.Deserialize<TResult>();
 
-                case HttpStatusCode.ServiceUnavailable:
+					return HttpWebResponse<TResult>.Success(result, httpStatusCode);
 
-                    return HttpWebResponse<TResult>.Fail(
-                        "The server is unavailable", httpStatusCode
-                    );
+				case HttpStatusCode.NotFound:
 
-                case HttpStatusCode.Forbidden:
+					return HttpWebResponse<TResult>.Fail(
+						"The request method not found", httpStatusCode
+					);
 
-                    return HttpWebResponse<TResult>.Fail(
-                        "The request is forbidden", httpStatusCode
-                    );
+				case HttpStatusCode.ServiceUnavailable:
 
-                default:
+					return HttpWebResponse<TResult>.Fail(
+						"The server is unavailable", httpStatusCode
+					);
 
-                    return HttpWebResponse<TResult>.Fail(response.Serialize(), httpStatusCode);
-            }
-        }
-    }
+				case HttpStatusCode.Forbidden:
+
+					return HttpWebResponse<TResult>.Fail(
+						"The request is forbidden", httpStatusCode
+					);
+
+				default:
+
+					return HttpWebResponse<TResult>.Fail(response.Serialize(), httpStatusCode);
+			}
+		}
+	}
 }

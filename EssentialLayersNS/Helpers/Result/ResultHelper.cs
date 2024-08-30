@@ -25,13 +25,13 @@ namespace EssentialLayers.Helpers.Result
 		{
 			Type type = e.GetType();
 
-			if (ErrorMessages.Messages.TryGetValue(type, out string userMessage))
+			if (ErrorMessages.Messages.TryGetValue(type, out string message))
 			{
 				LoggerHelper.Error(
 					e, $" ResultHelper - File: {file} | Member: {member} | Line Number: {lineNumber} - [{e.Message}]"
 				);
 
-				if (userMessage != null) return new ResultHelper<T>(false, userMessage, default!);
+				if (message != null) return new ResultHelper<T>(false, message, default!);
 			}
 
 			return new ResultHelper<T>(

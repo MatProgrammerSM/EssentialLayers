@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace EssentialLayers.Helpers.Http
 {
-    public class RequestOptions(bool isCached = false)
+	public class RequestOptions(bool isCached = false)
     {
         public IDictionary<string, string> Headers { get; set; } = new Dictionary<string, string>();
 
@@ -12,9 +12,5 @@ namespace EssentialLayers.Helpers.Http
         public CancellationToken CancellationToken { get; set; } = default;
 
         public string BearerToken { get; set; } = string.Empty;
-
-        public string AppName { get; set; } = "DefaultApp";
-
-        public string AppVersion { get; set; } = "1.0";
     }
 }

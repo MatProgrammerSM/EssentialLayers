@@ -29,11 +29,16 @@ namespace EssentialLayers.Helpers.Extension
 			}
 		}
 
-		public static string Serialize<T>(this T self)
+		public static string Serialize<T>(this T self, bool ident = false)
 		{
 			try
 			{
-				return JsonSerializer.Serialize(self);
+				return JsonSerializer.Serialize(
+					self, new JsonSerializerOptions
+					{
+						WriteIndented = ident,
+					}
+				);
 			}
 			catch (Exception e)
 			{
@@ -137,7 +142,18 @@ namespace EssentialLayers.Helpers.Extension
 
 		public static bool NotEquals<T, K>(this T self, K other)
 		{
-			return !self.Equals(other);
+			string serializedSelf = self.Serialize();
+			string serializedOther = other.Serialize();
+
+			return !serializedSelf.Equals(serializedOther);
+		}
+
+		public static bool AreEquals<T, K>(this T self, K other)
+		{
+			string serializedSelf = self.Serialize();
+			string serializedOther = other.Serialize();
+
+			return serializedSelf.Equals(serializedOther);
 		}
 	}
 }

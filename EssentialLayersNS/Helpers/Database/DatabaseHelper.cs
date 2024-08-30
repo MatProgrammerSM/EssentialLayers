@@ -141,7 +141,7 @@ namespace EssentialLayers.Helpers.Database
 			return result;
 		}
 
-		public ResultHelper<TResult> GetCombined<TResult, TRequest>(
+		public ResultHelper<TResult> ExecuteComplex<TResult, TRequest>(
 			TRequest request, string storedProcedure
 		)
 		{
@@ -180,7 +180,7 @@ namespace EssentialLayers.Helpers.Database
 			return result;
 		}
 
-		public async Task<ResultHelper<TResult>> GetCombinedAsync<TResult, TRequest>(
+		public async Task<ResultHelper<TResult>> ExecuteComplexAsync<TResult, TRequest>(
 			TRequest request, string storedProcedure
 		)
 		{
@@ -219,7 +219,7 @@ namespace EssentialLayers.Helpers.Database
 			return result;
 		}
 
-		public ResultHelper<IEnumerable<TResult>> GetAllCombined<TResult, TRequest>(
+		public ResultHelper<IEnumerable<TResult>> ExecuteComplexAll<TResult, TRequest>(
 			TRequest request, string storedProcedure
 		)
 		{
@@ -258,7 +258,7 @@ namespace EssentialLayers.Helpers.Database
 			return result;
 		}
 
-		public async Task<ResultHelper<IEnumerable<TResult>>> GetAllCombinedAsync<TResult, TRequest>(
+		public async Task<ResultHelper<IEnumerable<TResult>>> ExecuteComplexAllAsync<TResult, TRequest>(
 			TRequest request, string storedProcedure
 		)
 		{
@@ -297,80 +297,14 @@ namespace EssentialLayers.Helpers.Database
 			return result;
 		}
 
-		public ResultHelper<IEnumerable<IEnumerable<dynamic>>> QueryMultiple(
-			string query
+
+		public ResultHelper<IEnumerable<IEnumerable<dynamic>>> QueryMultiple<TRequest>(
+			TRequest request, string storedProcedure
 		)
 		{
 			ResultHelper<IEnumerable<IEnumerable<dynamic>>> result = ResultHelper<IEnumerable<IEnumerable<dynamic>>>.Success([]);
+			DynamicParameters dynamicParameters = request.ParseDynamicParameters();
 
-			using SqlConnection sqlConnection = new(ConnectionString);
-
-			try
-			{
-				List<IEnumerable<dynamic>> resultSets = [];
-
-				using GridReader gridReader = sqlConnection.QueryMultiple(
-					query, commandTimeout: 0, commandType: CommandType.Text
-				);
-
-				while (!gridReader.IsConsumed)
-				{
-					resultSets.Add(gridReader.Read());
-				}
-
-				result = ResultHelper<IEnumerable<IEnumerable<dynamic>>>.Success(resultSets);
-			}
-			catch (Exception e)
-			{
-				result = ResultHelper<IEnumerable<IEnumerable<dynamic>>>.Fail(e);
-			}
-			finally
-			{
-				SqlConnection.ClearPool(sqlConnection);
-			}
-
-			return result;
-		}
-
-		public async Task<ResultHelper<IEnumerable<IEnumerable<dynamic>>>> QueryMultipleAsync(
-			string query
-		)
-		{
-			ResultHelper<IEnumerable<IEnumerable<dynamic>>> result = ResultHelper<IEnumerable<IEnumerable<dynamic>>>.Success([]);
-			using SqlConnection sqlConnection = new(ConnectionString);
-
-			try
-			{
-				List<IEnumerable<dynamic>> resultSets = [];
-
-				using GridReader gridReader = await sqlConnection.QueryMultipleAsync(
-					query, commandTimeout: 0, commandType: CommandType.Text
-				);
-
-				while (!gridReader.IsConsumed)
-				{
-					resultSets.Add(gridReader.Read());
-				}
-
-				result = ResultHelper<IEnumerable<IEnumerable<dynamic>>>.Success(resultSets);
-			}
-			catch (Exception e)
-			{
-				result = ResultHelper<IEnumerable<IEnumerable<dynamic>>>.Fail(e);
-			}
-			finally
-			{
-				SqlConnection.ClearPool(sqlConnection);
-			}
-
-			return result;
-		}
-
-		public ResultHelper<IEnumerable<IEnumerable<dynamic>>> QueryMultiple(
-			DynamicParameters dynamicParameters, string storedProcedure
-		)
-		{
-			ResultHelper<IEnumerable<IEnumerable<dynamic>>> result = ResultHelper<IEnumerable<IEnumerable<dynamic>>>.Success([]);
 			using SqlConnection sqlConnection = new(ConnectionString);
 
 			try
@@ -400,11 +334,13 @@ namespace EssentialLayers.Helpers.Database
 			return result;
 		}
 
-		public async Task<ResultHelper<IEnumerable<IEnumerable<dynamic>>>> QueryMultipleAsync(
-			DynamicParameters dynamicParameters, string storedProcedure
+		public async Task<ResultHelper<IEnumerable<IEnumerable<dynamic>>>> QueryMultipleAsync<TRequest>(
+			TRequest request, string storedProcedure
 		)
 		{
 			ResultHelper<IEnumerable<IEnumerable<dynamic>>> result = ResultHelper<IEnumerable<IEnumerable<dynamic>>>.Success([]);
+			DynamicParameters dynamicParameters = request.ParseDynamicParameters();
+
 			using SqlConnection sqlConnection = new(ConnectionString);
 
 			try
