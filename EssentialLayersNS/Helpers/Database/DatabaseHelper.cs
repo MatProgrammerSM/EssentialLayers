@@ -1,6 +1,5 @@
 ﻿using Dapper;
 using EssentialLayers.Helpers.Extension;
-using EssentialLayers.Helpers.Http;
 using EssentialLayers.Helpers.Result;
 using Microsoft.Data.SqlClient;
 using System;
@@ -14,18 +13,12 @@ namespace EssentialLayers.Helpers.Database
 {
 	public class DatabaseHelper(string connectionString)
 	{
-		private static HttpWebHelper get;
-
 		private readonly string ConnectionString = connectionString;
 
 		/**/
 
-		public static HttpWebHelper Get => get ??= new HttpWebHelper();
-
-		/**/
-
 		public ResultHelper<TResult> Execute<TResult, TRequest>(
-			TRequest request, string storeProcedure
+			TRequest request, string storedProcedure
 		)
 		{
 			using SqlConnection sqlConnection = new(ConnectionString);
@@ -37,7 +30,7 @@ namespace EssentialLayers.Helpers.Database
 				DynamicParameters dynamicParameters = request.ParseDynamic();
 
 				TResult query = sqlConnection.QueryFirst<TResult>(
-					storeProcedure, dynamicParameters, commandTimeout: 0,
+					storedProcedure, dynamicParameters, commandTimeout: 0,
 					commandType: CommandType.StoredProcedure
 				);
 
@@ -56,7 +49,7 @@ namespace EssentialLayers.Helpers.Database
 		}
 
 		public async Task<ResultHelper<TResult>> ExecuteAsync<TResult, TRequest>(
-			TRequest request, string storeProcedure
+			TRequest request, string storedProcedure
 		)
 		{
 			await using SqlConnection sqlConnection = new(ConnectionString);
@@ -68,7 +61,7 @@ namespace EssentialLayers.Helpers.Database
 				DynamicParameters dynamicParameters = request.ParseDynamic();
 
 				TResult query = await sqlConnection.QueryFirstAsync<TResult>(
-					storeProcedure, dynamicParameters, commandTimeout: 0,
+					storedProcedure, dynamicParameters, commandTimeout: 0,
 					commandType: CommandType.StoredProcedure
 				);
 
@@ -87,7 +80,7 @@ namespace EssentialLayers.Helpers.Database
 		}
 
 		public ResultHelper<IEnumerable<TResult>> ExecuteAll<TResult, TRequest>(
-			TRequest request, string storeProcedure
+			TRequest request, string storedProcedure
 		)
 		{
 			using SqlConnection sqlConnection = new(ConnectionString);
@@ -99,7 +92,7 @@ namespace EssentialLayers.Helpers.Database
 				DynamicParameters dynamicParameters = request.ParseDynamic();
 
 				IEnumerable<TResult> query = sqlConnection.Query<TResult>(
-					storeProcedure, dynamicParameters, commandTimeout: 0,
+					storedProcedure, dynamicParameters, commandTimeout: 0,
 					commandType: CommandType.StoredProcedure
 				);
 
@@ -118,7 +111,7 @@ namespace EssentialLayers.Helpers.Database
 		}
 
 		public async Task<ResultHelper<IEnumerable<TResult>>> ExecuteAllAsync<TResult, TRequest>(
-			TRequest request, string storeProcedure
+			TRequest request, string storedProcedure
 		)
 		{
 			await using SqlConnection sqlConnection = new(ConnectionString);
@@ -130,7 +123,7 @@ namespace EssentialLayers.Helpers.Database
 				DynamicParameters dynamicParameters = request.ParseDynamic();
 
 				IEnumerable<TResult> query = await sqlConnection.QueryAsync<TResult>(
-					storeProcedure, dynamicParameters, commandTimeout: 0,
+					storedProcedure, dynamicParameters, commandTimeout: 0,
 					commandType: CommandType.StoredProcedure
 				);
 
@@ -149,15 +142,15 @@ namespace EssentialLayers.Helpers.Database
 		}
 
 		public ResultHelper<TResult> GetCombined<TResult, TRequest>(
-			TRequest request, string storeProcedure
+			TRequest request, string storedProcedure
 		)
 		{
 			ResultHelper<TResult> result = ResultHelper<TResult>.Success(Activator.CreateInstance<TResult>());
 
 			using (SqlConnection sqlConnection = new(ConnectionString))
 			{
-				using SqlCommand command = new(storeProcedure, sqlConnection);
-				
+				using SqlCommand command = new(storedProcedure, sqlConnection);
+
 				DynamicParameters dynamicParameters = request.ParseDynamicParameters();
 				SqlParameter[] sqlParameters = dynamicParameters.ParseSqlParameters();
 
@@ -169,7 +162,7 @@ namespace EssentialLayers.Helpers.Database
 				{
 					sqlConnection.Open();
 
-					TResult first = command.GetResults<TResult>().FirstOrDefault();
+					TResult first = command.GetResults<TResult>().FirstOrDefault()!;
 
 					result = ResultHelper<TResult>.Success(first);
 				}
@@ -188,14 +181,14 @@ namespace EssentialLayers.Helpers.Database
 		}
 
 		public async Task<ResultHelper<TResult>> GetCombinedAsync<TResult, TRequest>(
-			TRequest request, string storeProcedure
+			TRequest request, string storedProcedure
 		)
 		{
 			ResultHelper<TResult> result = ResultHelper<TResult>.Success(Activator.CreateInstance<TResult>());
 
 			using (SqlConnection sqlConnection = new(ConnectionString))
 			{
-				using SqlCommand command = new(storeProcedure, sqlConnection);
+				using SqlCommand command = new(storedProcedure, sqlConnection);
 
 				DynamicParameters dynamicParameters = request.ParseDynamicParameters();
 				SqlParameter[] sqlParameters = dynamicParameters.ParseSqlParameters();
@@ -208,7 +201,7 @@ namespace EssentialLayers.Helpers.Database
 				{
 					sqlConnection.Open();
 
-					TResult first = (await command.GetResultsAsync<TResult>()).FirstOrDefault();
+					TResult first = (await command.GetResultsAsync<TResult>()).FirstOrDefault()!;
 
 					result = ResultHelper<TResult>.Success(first);
 				}
@@ -227,14 +220,14 @@ namespace EssentialLayers.Helpers.Database
 		}
 
 		public ResultHelper<IEnumerable<TResult>> GetAllCombined<TResult, TRequest>(
-			TRequest request, string storeProcedure
+			TRequest request, string storedProcedure
 		)
 		{
 			ResultHelper<IEnumerable<TResult>> result = ResultHelper<IEnumerable<TResult>>.Success([]);
 
 			using (SqlConnection sqlConnection = new(ConnectionString))
 			{
-				using SqlCommand command = new(storeProcedure, sqlConnection);
+				using SqlCommand command = new(storedProcedure, sqlConnection);
 
 				DynamicParameters dynamicParameters = request.ParseDynamicParameters();
 				SqlParameter[] sqlParameters = dynamicParameters.ParseSqlParameters();
@@ -266,14 +259,14 @@ namespace EssentialLayers.Helpers.Database
 		}
 
 		public async Task<ResultHelper<IEnumerable<TResult>>> GetAllCombinedAsync<TResult, TRequest>(
-			TRequest request, string storeProcedure
+			TRequest request, string storedProcedure
 		)
 		{
 			ResultHelper<IEnumerable<TResult>> result = ResultHelper<IEnumerable<TResult>>.Success([]);
 
 			using (SqlConnection sqlConnection = new(ConnectionString))
 			{
-				using SqlCommand command = new(storeProcedure, sqlConnection);
+				using SqlCommand command = new(storedProcedure, sqlConnection);
 
 				DynamicParameters dynamicParameters = request.ParseDynamicParameters();
 				SqlParameter[] sqlParameters = dynamicParameters.ParseSqlParameters();
@@ -374,7 +367,7 @@ namespace EssentialLayers.Helpers.Database
 		}
 
 		public ResultHelper<IEnumerable<IEnumerable<dynamic>>> QueryMultiple(
-			DynamicParameters dynamicParameters, string storeProcedure
+			DynamicParameters dynamicParameters, string storedProcedure
 		)
 		{
 			ResultHelper<IEnumerable<IEnumerable<dynamic>>> result = ResultHelper<IEnumerable<IEnumerable<dynamic>>>.Success([]);
@@ -385,7 +378,7 @@ namespace EssentialLayers.Helpers.Database
 				List<IEnumerable<dynamic>> resultSets = [];
 
 				GridReader gridReader = sqlConnection.QueryMultiple(
-					storeProcedure, dynamicParameters, commandTimeout: 0, commandType: CommandType.StoredProcedure
+					storedProcedure, dynamicParameters, commandTimeout: 0, commandType: CommandType.StoredProcedure
 				);
 
 				while (!gridReader.IsConsumed)
@@ -408,7 +401,7 @@ namespace EssentialLayers.Helpers.Database
 		}
 
 		public async Task<ResultHelper<IEnumerable<IEnumerable<dynamic>>>> QueryMultipleAsync(
-			DynamicParameters dynamicParameters, string storeProcedure
+			DynamicParameters dynamicParameters, string storedProcedure
 		)
 		{
 			ResultHelper<IEnumerable<IEnumerable<dynamic>>> result = ResultHelper<IEnumerable<IEnumerable<dynamic>>>.Success([]);
@@ -419,7 +412,7 @@ namespace EssentialLayers.Helpers.Database
 				List<IEnumerable<dynamic>> resultSets = [];
 
 				GridReader gridReader = await sqlConnection.QueryMultipleAsync(
-					storeProcedure, dynamicParameters, commandTimeout: 0, commandType: CommandType.StoredProcedure
+					storedProcedure, dynamicParameters, commandTimeout: 0, commandType: CommandType.StoredProcedure
 				);
 
 				while (!gridReader.IsConsumed)

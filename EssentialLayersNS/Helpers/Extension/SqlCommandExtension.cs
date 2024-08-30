@@ -57,7 +57,7 @@ namespace EssentialLayers.Helpers.Extension
 					{
 						object value = executeReader.GetValue(column.ColumnName);
 
-						instance.GetType().GetProperty(column.ColumnName).SetValue(instance, value);
+						instance!.GetType().GetProperty(column.ColumnName)!.SetValue(instance, value);
 					}
 
 					result.Add(instance);
@@ -69,51 +69,43 @@ namespace EssentialLayers.Helpers.Extension
 
 		public static SqlParameter[] ParseSqlParameters(this DynamicParameters dynamicParameters)
 		{
-			SqlParameter[] sqlParameters = new SqlParameter[dynamicParameters.ParameterNames.Count()];
+			IList<SqlParameter> sqlParameters = [];
 
-			foreach (string parameter in dynamicParameters.ParameterNames)
+			foreach (string parameterName in dynamicParameters.ParameterNames)
 			{
-				object param = dynamicParameters.Get<object>(parameter);
-				SqlParameter sqlParameter = new(parameter, param ?? DBNull.Value);
+				object value = dynamicParameters.Get<object>(parameterName);
 
-				if (param is IDbDataParameter dbParam)
+				SqlParameter sqlParameter = new()
 				{
-					sqlParameter.Direction = dbParam.Direction;
-					sqlParameter.DbType = dbParam.DbType;
-					sqlParameter.Size = dbParam.Size;
-					sqlParameter.Precision = dbParam.Precision;
-					sqlParameter.Scale = dbParam.Scale;
-				}
+					ParameterName = parameterName,
+					Value = value
+				};
 
-				sqlParameters.Append(sqlParameter);
+				sqlParameters.Add(sqlParameter);
 			}
 
-			return sqlParameters;
+			return [.. sqlParameters];
 		}
 
 		public static SqlParameter[] ToSqlParameterCollection<T>(
 			this T self
 		)
 		{
-			List<PropertyInfo> properties = [.. self.GetType().GetProperties()];
+			List<PropertyInfo> properties = [.. self!.GetType().GetProperties()];
 			SqlParameter[] sqlParameters = new SqlParameter[properties.Count];
 
 			foreach (var property in properties)
 			{
-				SqlDbType sqlDbType = property.PropertyType.GetSqlDbType();
-				object value = property.GetValue(self);
+				DbType sqlDbType = property.PropertyType.GetDbType();
+				object value = property.GetValue(self)!;
 				string parameterName = $"@{property.Name}";
 
-				var sqlParameter = new SqlParameter(parameterName, sqlDbType);
-
-				if (value is IDbDataParameter dbParam)
+				SqlParameter sqlParameter = new()
 				{
-					sqlParameter.Direction = dbParam.Direction;
-					sqlParameter.DbType = dbParam.DbType;
-					sqlParameter.Size = dbParam.Size;
-					sqlParameter.Precision = dbParam.Precision;
-					sqlParameter.Scale = dbParam.Scale;
-				}
+					ParameterName = parameterName,
+					Value = value,
+					DbType = sqlDbType
+				};
 
 				sqlParameters.Append(sqlParameter);
 			}

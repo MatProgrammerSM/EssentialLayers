@@ -62,5 +62,24 @@ namespace EssentialLayers.Helpers.Extension
 
 			return value;
 		}
+
+		public static IDictionary<TValue, TKey> Inverse<TKey, TValue>(
+			this IDictionary<TKey, TValue> self
+		)
+		{
+			if (self == null) return new Dictionary<TValue, TKey>();
+
+			IDictionary<TValue, TKey> result = new Dictionary<TValue, TKey>();
+
+			foreach (KeyValuePair<TKey, TValue> keyValuePair in self)
+			{
+				TKey key = keyValuePair.Key;
+				TValue value = keyValuePair.Value;
+
+				result.Add(value, key);
+			}
+
+			return result;
+		}
 	}
 }
