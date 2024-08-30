@@ -13,7 +13,7 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Dapper Results Cache Error Handling Blobs Helpers Exstension Web-Requests</PackageTags>
 		<PackageReadmeFile>Readme.md</PackageReadmeFile>
-		<Version>1.1.6</Version>
+		<Version>1.1.7</Version>
 		<Title>Essential Layers</Title>
 	</PropertyGroup>
 

@@ -17,7 +17,7 @@ namespace EssentialLayers.Services.Blob
 
 		private string ConnectionString;
 
-		public void Set(string connectionString)
+		public void SetConnectionString(string connectionString)
 		{
 			ConnectionString = connectionString;
 			BlobServiceClient = new(connectionString);

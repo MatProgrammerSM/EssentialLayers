@@ -1,6 +1,6 @@
 ﻿namespace EssentialLayers.Services.Http
 {
-    public class HttpWebHelperOption
+    public class HttpWebServiceOption
     {
         public string AppName { get; set; } = "AppName";
 

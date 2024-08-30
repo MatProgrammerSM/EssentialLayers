@@ -2,7 +2,7 @@
 
 namespace EssentialLayers.Helpers.Cache
 {
-    public abstract class CacheHelper<TResult>
+	internal abstract class CacheHelper<TResult>
 	{
 		public static readonly SimpleMemoryCache<HttpWebResponse<TResult>> HttpWebResponseCache = new();
 	}

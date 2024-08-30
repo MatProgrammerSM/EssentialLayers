@@ -28,6 +28,10 @@ namespace EssentialLayers.Services.Database
 			TRequest request, string storedProcedure
 		);
 
+		Task<ResultHelper<TResult>> ExecuteComplexAsync<TResult, TRequest>(
+			TRequest request, string storedProcedure
+		);
+
 		ResultHelper<IEnumerable<TResult>> ExecuteComplexAll<TResult, TRequest>(
 			TRequest request, string storedProcedure
 		);

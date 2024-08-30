@@ -3,14 +3,14 @@ using System.Threading;
 
 namespace EssentialLayers.Services.Http
 {
-    public class RequestOptions(bool isCached = false)
-    {
-        public IDictionary<string, string> Headers { get; set; } = new Dictionary<string, string>();
+	public class RequestOptions(bool isCached = false)
+	{
+		public IDictionary<string, string> Headers { get; set; } = new Dictionary<string, string>();
 
-        public bool IsCached { get; set; } = isCached;
+		public bool IsCached { get; set; } = isCached;
 
-        public CancellationToken CancellationToken { get; set; } = default;
+		public CancellationToken CancellationToken { get; set; } = default;
 
-        public string BearerToken { get; set; } = string.Empty;
-    }
+		public string BearerToken { get; set; } = string.Empty;
+	}
 }

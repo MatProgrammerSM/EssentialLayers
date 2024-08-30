@@ -4,7 +4,7 @@ namespace EssentialLayers.Services.Http
 {
     public interface IHttpWebService
 	{
-		void SetOptions(HttpWebHelperOption httpWebHelperOption);
+		void SetOptions(HttpWebServiceOption httpWebHelperOption);
 
 		Task<HttpWebResponse<TResult>> GetAsync<TResult, TRequest>(
 			TRequest request, string url, RequestOptions options = null

@@ -23,11 +23,11 @@ namespace EssentialLayers.Services.Http
 
 		/**/
 
-		private HttpWebHelperOption HttpWebHelperOption;
+		private HttpWebServiceOption HttpWebHelperOption;
 
 		/**/
 
-		public void SetOptions(HttpWebHelperOption httpWebHelperOption)
+		public void SetOptions(HttpWebServiceOption httpWebHelperOption)
 		{
 			HttpWebHelperOption = httpWebHelperOption;
 		}

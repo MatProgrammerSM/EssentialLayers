@@ -19,5 +19,10 @@ namespace EssentialLayers.Helpers.Logger
 		{
 			Log.Logger.Warning(message);
 		}
+
+		public static void Debug(string message)
+		{
+			Log.Logger.Debug(message);
+		}
 	}
 }
