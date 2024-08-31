@@ -11,9 +11,9 @@ namespace EssentialLayers
 			this IServiceCollection services
 		)
 		{
-			services.AddScoped<IDatabaseService, DatabaseService>();
-			services.AddScoped<IHttpWebService, HttpWebService>();
-			services.AddScoped<IAzureBlobService, AzureBlobService>();
+			services.AddSingleton<IDatabaseService, DatabaseService>();
+			services.AddSingleton<IHttpWebService, HttpWebService>();
+			services.AddSingleton<IAzureBlobService, AzureBlobService>();
 
 			return services;
 		}
