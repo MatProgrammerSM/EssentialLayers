@@ -2,43 +2,52 @@
 using EssentialLayers.Helpers.Extension;
 using EssentialLayers.Helpers.Result;
 using Microsoft.Data.SqlClient;
-using System.Collections.ObjectModel;
+using System;
+using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
-using System.Reflection;
+using System.Linq;
+using System.Threading.Tasks;
+using static Dapper.SqlMapper;
 
 namespace EssentialLayers.Services.Database
 {
-	public class DatabaseService(string connectionString) : IDatabaseService
+	internal class DatabaseService : IDatabaseService
 	{
-		private readonly string ConnectionString = connectionString;
+		private string ConnectionString;
 
-		public ResultHelper<TResult> Get<TResult, TRequest>(
-			TRequest request, string storeProcedure
-		) where TResult : Response
+		/**/
+
+		public void SetConnectionString(string connectionString)
 		{
-			using SqlConnection sqlConnection = new(ConnectionString);
+			ConnectionString = connectionString;
+		}
 
-			ResultHelper<TResult> result;
+		public ResultHelper<TResult> Execute<TResult, TRequest>(
+			TRequest request, string storedProcedure
+		)
+		{
+			ResultHelper<TResult> result = ValidateConnectionString(
+				Activator.CreateInstance<TResult>(), ConnectionString
+			);
+
+			if (result.Ok.False()) return result;
+
+			using SqlConnection sqlConnection = new(ConnectionString);
 
 			try
 			{
 				DynamicParameters dynamicParameters = request.ParseDynamic();
 
-				TResult? query = sqlConnection.QueryFirst<TResult>(
-					storeProcedure, dynamicParameters, commandTimeout: 0,
+				TResult query = sqlConnection.QueryFirst<TResult>(
+					storedProcedure, dynamicParameters, commandTimeout: 0,
 					commandType: CommandType.StoredProcedure
 				);
 
-				bool isValid = query!.SearchProperty<bool>(nameof(Response.Ok));
-				string message = query!.SearchProperty<string>(nameof(Response.Message));
-
-				if (isValid) result = ResultHelper<TResult>.Success(query);
-				else result = ResultHelper<TResult>.Fail(message);
+				result = ResultHelper<TResult>.Success(query);
 			}
 			catch (Exception e)
 			{
-				result = ResultHelper<TResult>.Fail(e.Message);
+				result = ResultHelper<TResult>.Fail(e);
 			}
 			finally
 			{
@@ -48,67 +57,32 @@ namespace EssentialLayers.Services.Database
 			return result;
 		}
 
-		public ResultHelper<IEnumerable<TResult>> GetAll<TResult, TRequest>(
-			TRequest request, string storeProcedure
-		) where TResult : Response
-		{
-			using SqlConnection sqlConnection = new(ConnectionString);
-
-			ResultHelper<IEnumerable<TResult>> result;
-
-			try
-			{
-				DynamicParameters dynamicParameters = request.ParseDynamic();
-
-				IEnumerable<TResult>? query = sqlConnection.Query<TResult>(
-					storeProcedure, dynamicParameters, commandTimeout: 0,
-					commandType: CommandType.StoredProcedure
-				);
-
-				bool isValid = query!.SearchProperty<bool>(nameof(Response.Ok));
-				string message = query!.SearchProperty<string>(nameof(Response.Message));
-
-				if (isValid) result = ResultHelper<IEnumerable<TResult>>.Success(query);
-				else result = ResultHelper<IEnumerable<TResult>>.Fail(message);
-			}
-			catch (Exception e)
-			{
-				result = ResultHelper<IEnumerable<TResult>>.Fail(e.Message);
-			}
-			finally
-			{
-				SqlConnection.ClearPool(sqlConnection);
-			}
-
-			return result;
-		}
-
-		public async Task<ResultHelper<IEnumerable<TResult>>> GetAllAsync<TResult, TRequest>(
-			TRequest request, string storeProcedure
-		) where TResult : Response
+		public async Task<ResultHelper<TResult>> ExecuteAsync<TResult, TRequest>(
+			TRequest request, string storedProcedure
+		)
 		{
 			await using SqlConnection sqlConnection = new(ConnectionString);
 
-			ResultHelper<IEnumerable<TResult>> result;
+			ResultHelper<TResult> result = ValidateConnectionString(
+				Activator.CreateInstance<TResult>(), ConnectionString
+			);
+
+			if (result.Ok.False()) return result;
 
 			try
 			{
 				DynamicParameters dynamicParameters = request.ParseDynamic();
 
-				IEnumerable<TResult>? query = await sqlConnection.QueryAsync<TResult>(
-					storeProcedure, dynamicParameters, commandTimeout: 0,
+				TResult query = await sqlConnection.QueryFirstAsync<TResult>(
+					storedProcedure, dynamicParameters, commandTimeout: 0,
 					commandType: CommandType.StoredProcedure
 				);
 
-				bool isValid = query!.SearchProperty<bool>(nameof(Response.Ok));
-				string message = query!.SearchProperty<string>(nameof(Response.Message));
-
-				if (isValid) result = ResultHelper<IEnumerable<TResult>>.Success(query);
-				else result = ResultHelper<IEnumerable<TResult>>.Fail(message);
+				result = ResultHelper<TResult>.Success(query);
 			}
 			catch (Exception e)
 			{
-				result = ResultHelper<IEnumerable<TResult>>.Fail(e.Message);
+				result = ResultHelper<TResult>.Fail(e);
 			}
 			finally
 			{
@@ -118,32 +92,67 @@ namespace EssentialLayers.Services.Database
 			return result;
 		}
 
-		public async Task<ResultHelper<TResult>> GetAsync<TResult, TRequest>(
-			TRequest request, string storeProcedure
-		) where TResult : Response
+		public ResultHelper<IEnumerable<TResult>> ExecuteAll<TResult, TRequest>(
+			TRequest request, string storedProcedure
+		)
+		{
+			using SqlConnection sqlConnection = new(ConnectionString);
+
+			ResultHelper<IEnumerable<TResult>> result = ValidateConnectionString<IEnumerable<TResult>>(
+				[], ConnectionString
+			);
+
+			if (result.Ok.False()) return result;
+
+			try
+			{
+				DynamicParameters dynamicParameters = request.ParseDynamic();
+
+				IEnumerable<TResult> query = sqlConnection.Query<TResult>(
+					storedProcedure, dynamicParameters, commandTimeout: 0,
+					commandType: CommandType.StoredProcedure
+				);
+
+				result = ResultHelper<IEnumerable<TResult>>.Success(query);
+			}
+			catch (Exception e)
+			{
+				result = ResultHelper<IEnumerable<TResult>>.Fail(e);
+			}
+			finally
+			{
+				SqlConnection.ClearPool(sqlConnection);
+			}
+
+			return result;
+		}
+
+		public async Task<ResultHelper<IEnumerable<TResult>>> ExecuteAllAsync<TResult, TRequest>(
+			TRequest request, string storedProcedure
+		)
 		{
 			await using SqlConnection sqlConnection = new(ConnectionString);
 
-			ResultHelper<TResult> result;
+			ResultHelper<IEnumerable<TResult>> result = ValidateConnectionString<IEnumerable<TResult>>(
+				[], ConnectionString
+			);
+
+			if (result.Ok.False()) return result;
 
 			try
 			{
 				DynamicParameters dynamicParameters = request.ParseDynamic();
 
-				TResult? query = await sqlConnection.QueryFirstAsync<TResult>(
-					storeProcedure, dynamicParameters, commandTimeout: 0,
+				IEnumerable<TResult> query = await sqlConnection.QueryAsync<TResult>(
+					storedProcedure, dynamicParameters, commandTimeout: 0,
 					commandType: CommandType.StoredProcedure
 				);
 
-				bool isValid = query!.SearchProperty<bool>(nameof(Response.Ok));
-				string message = query!.SearchProperty<string>(nameof(Response.Message));
-
-				if (isValid) result = ResultHelper<TResult>.Success(query);
-				else result = ResultHelper<TResult>.Fail(message);
+				result = ResultHelper<IEnumerable<TResult>>.Success(query);
 			}
 			catch (Exception e)
 			{
-				result = ResultHelper<TResult>.Fail(e.Message);
+				result = ResultHelper<IEnumerable<TResult>>.Fail(e);
 			}
 			finally
 			{
@@ -153,261 +162,271 @@ namespace EssentialLayers.Services.Database
 			return result;
 		}
 
-		public async Task<ResultHelper<TResult>> GetCombinedAsync<TResult, TRequest>(
-			string storedProcedure, TRequest request
-		) where TResult : Response
+		public ResultHelper<TResult> ExecuteComplex<TResult, TRequest>(
+			TRequest request, string storedProcedure
+		)
 		{
-			TResult respuesta = Activator.CreateInstance<TResult>();
+			ResultHelper<TResult> result = ValidateConnectionString(
+				Activator.CreateInstance<TResult>(), ConnectionString
+			);
 
-			await using (SqlConnection connection = new(ConnectionString))
+			if (result.Ok.False()) return result;
+
+			using (SqlConnection sqlConnection = new(ConnectionString))
 			{
-				await using SqlCommand command = new(storedProcedure, connection);
+				using SqlCommand command = new(storedProcedure, sqlConnection);
 
-				foreach (PropertyInfo prop in request!.GetType().GetProperties())
-				{
-					Tuple<object, SqlDbType> pair = AnalyzePropertyForList(
-						prop.PropertyType, prop.GetValue(request)!
-					);
+				DynamicParameters dynamicParameters = request.ParseDynamicParameters();
+				SqlParameter[] sqlParameters = dynamicParameters.ParseSqlParameters();
 
-					if (pair.Item2 != null && pair.Item2 == SqlDbType.Structured)
-					{
-						IEnumerable<object>? list = pair.Item1 as IEnumerable<object>;
-
-						if (list is not null)
-						{
-							using DataTable dataTable = new();
-							object? first = list.FirstOrDefault();
-
-							if (first != null)
-							{
-								IDictionary<string, object> headers = first.ToDictionary<object>();
-
-								foreach (KeyValuePair<string, object> header in headers)
-								{
-									dataTable.Columns.Add(header.Key);
-								}
-
-								foreach (object item in list)
-								{
-									IDictionary<string, object> dictionaries = item.ToDictionary<object>();
-									DataRow row = dataTable.NewRow();
-
-									foreach (KeyValuePair<string, object> dictionary in dictionaries)
-									{
-										row[dictionary.Key] = dictionary.Value;
-									}
-
-									dataTable.Rows.Add(row);
-								}
-
-								SqlParameter tvpParam = command.Parameters.AddWithValue(
-									$"@{prop.Name}", dataTable
-								);
-							}
-						}
-						else
-						{
-							using DataTable dataTable = new();
-							IDictionary<string, object> dictionaries = pair.Item1.ToDictionary<object>();
-							DataRow row = dataTable.NewRow();
-
-							foreach (KeyValuePair<string, object> item in dictionaries)
-							{
-								dataTable.Columns.Add(item.Key);
-								row[item.Key] = item.Value;
-							}
-
-							dataTable.Rows.Add(row);
-
-							SqlParameter tvpParam = command.Parameters.AddWithValue(
-								$"@{prop.Name}", dataTable
-							);
-						}
-					}
-					else
-					{
-						SqlParameter tvpParam = command.Parameters.AddWithValue(
-							$"@{prop.Name}", pair.Item1
-						);
-						tvpParam.SqlDbType = pair.Item2;
-					}
-				}
-
+				command.Parameters.AddRange(sqlParameters);
 				command.CommandType = CommandType.StoredProcedure;
-				command.CommandTimeout = 3600;
+				command.CommandTimeout = 0;
 
 				try
 				{
-					await connection.OpenAsync();
+					sqlConnection.Open();
 
-					if (connection.State == ConnectionState.Open)
-					{
-						await using SqlDataReader executeReader = await command.ExecuteReaderAsync(
-							CommandBehavior.SingleRow
-						);
+					TResult first = command.GetResults<TResult>().FirstOrDefault()!;
 
-						while (await executeReader.ReadAsync())
-						{
-							TResult tmpModel = Activator.CreateInstance<TResult>();
-
-							ReadOnlyCollection<DbColumn> columns = executeReader.GetColumnSchema();
-
-							foreach (DbColumn column in columns)
-							{
-								object value = executeReader.GetValue(column.ColumnName);
-
-								if (value is not DBNull)
-								{
-									tmpModel.GetType().GetProperty(column.ColumnName)?.SetValue(tmpModel, value);
-								}
-							}
-
-							respuesta = tmpModel;
-						}
-					}
+					result = ResultHelper<TResult>.Success(first);
 				}
 				catch (Exception e)
 				{
-					return await Task.FromResult(ResultHelper<TResult>.Fail($"DPGA {e.Message}"));
+					result = ResultHelper<TResult>.Fail(e);
 				}
 				finally
 				{
-					await connection.CloseAsync();
-
-					connection.Dispose();
-					command.Dispose();
+					sqlConnection.Close();
+					SqlConnection.ClearPool(sqlConnection);
 				}
 			}
 
-			return await Task.FromResult(ResultHelper<TResult>.Success(respuesta));
+			return result;
 		}
 
-		public async Task<ResultHelper<IList<TResult>>> GetAllCombinedAsync<TResult, TRequest>(
-			string storedProcedure, TRequest request
-		) where TResult : Response
+		public async Task<ResultHelper<TResult>> ExecuteComplexAsync<TResult, TRequest>(
+			TRequest request, string storedProcedure
+		)
 		{
-			IList<TResult> respuesta = [];
+			ResultHelper<TResult> result = ValidateConnectionString(
+				Activator.CreateInstance<TResult>(), ConnectionString
+			);
 
-			await using (SqlConnection connection = new(ConnectionString))
+			if (result.Ok.False()) return result;
+
+			using (SqlConnection sqlConnection = new(ConnectionString))
 			{
-				await using SqlCommand command = new(storedProcedure, connection);
+				using SqlCommand command = new(storedProcedure, sqlConnection);
 
+				DynamicParameters dynamicParameters = request.ParseDynamicParameters();
+				SqlParameter[] sqlParameters = dynamicParameters.ParseSqlParameters();
+
+				command.Parameters.AddRange(sqlParameters);
 				command.CommandType = CommandType.StoredProcedure;
-				command.CommandTimeout = 3600;
+				command.CommandTimeout = 0;
 
 				try
 				{
-					await connection.OpenAsync();
+					sqlConnection.Open();
 
-					if (connection.State == ConnectionState.Open)
-					{
-						await using SqlDataReader executeReader = await command.ExecuteReaderAsync();
+					TResult first = (await command.GetResultsAsync<TResult>()).FirstOrDefault()!;
 
-						while (await executeReader.ReadAsync())
-						{
-							TResult tmpModel = Activator.CreateInstance<TResult>();
-							ReadOnlyCollection<DbColumn> columns = executeReader.GetColumnSchema();
-
-							foreach (DbColumn column in columns)
-							{
-								object value = executeReader.GetValue(column.ColumnName);
-
-								if (value is not DBNull)
-								{
-									tmpModel.GetType().GetProperty(column.ColumnName)?.SetValue(tmpModel, value);
-								}
-							}
-
-							respuesta.Add(tmpModel);
-						}
-					}
+					result = ResultHelper<TResult>.Success(first);
 				}
 				catch (Exception e)
 				{
-					return await Task.FromResult(ResultHelper<IList<TResult>>.Fail($"DPGA {e.Message}"));
+					result = ResultHelper<TResult>.Fail(e);
 				}
 				finally
 				{
-					await connection.CloseAsync();
-
-					connection.Dispose();
-					command.Dispose();
+					sqlConnection.Close();
+					SqlConnection.ClearPool(sqlConnection);
 				}
 			}
 
-			return await Task.FromResult(ResultHelper<IList<TResult>>.Success(respuesta));
+			return result;
 		}
 
-		private static Tuple<object, SqlDbType> AnalyzePropertyForList(Type type, object value)
+		public ResultHelper<IEnumerable<TResult>> ExecuteComplexAll<TResult, TRequest>(
+			TRequest request, string storedProcedure
+		)
 		{
-			SqlDbType dbType = SqlDbType.Variant;
+			ResultHelper<IEnumerable<TResult>> result = ValidateConnectionString<IEnumerable<TResult>>(
+				[], ConnectionString
+			);
 
-			switch (type.FullName)
+			if (result.Ok.False()) return result;
+
+			using (SqlConnection sqlConnection = new(ConnectionString))
 			{
-				case "System.Boolean":
+				using SqlCommand command = new(storedProcedure, sqlConnection);
 
-					dbType = SqlDbType.Bit;
+				DynamicParameters dynamicParameters = request.ParseDynamicParameters();
+				SqlParameter[] sqlParameters = dynamicParameters.ParseSqlParameters();
 
-					break;
+				command.Parameters.AddRange(sqlParameters);
+				command.CommandType = CommandType.StoredProcedure;
+				command.CommandTimeout = 0;
 
-				case "System.Byte":
+				try
+				{
+					sqlConnection.Open();
 
-					dbType = SqlDbType.Bit;
+					IEnumerable<TResult> results = command.GetResults<TResult>();
 
-					break;
-
-				case "System.Byte[]":
-
-					dbType = SqlDbType.Binary;
-
-					break;
-
-				case "System.Int32":
-
-					dbType = SqlDbType.Int;
-
-					break;
-
-				case "System.String":
-
-					dbType = SqlDbType.VarChar;
-					value ??= string.Empty;
-
-					break;
-
-				case "System.DateTime":
-
-					dbType = SqlDbType.DateTime;
-					value ??= DateTimeExtension.DEFAULT;
-
-					break;
-
-				case "System.Decimal":
-
-					dbType = SqlDbType.Decimal;
-
-					break;
-
-				case "System.Single":
-
-					dbType = SqlDbType.Float;
-
-					break;
-
-				case "System.Int64":
-
-					dbType = SqlDbType.BigInt;
-
-					break;
-
-				default:
-
-					dbType = SqlDbType.Structured;
-
-					break;
+					result = ResultHelper<IEnumerable<TResult>>.Success(results);
+				}
+				catch (Exception e)
+				{
+					result = ResultHelper<IEnumerable<TResult>>.Fail(e);
+				}
+				finally
+				{
+					sqlConnection.Close();
+					SqlConnection.ClearPool(sqlConnection);
+				}
 			}
 
-			return new Tuple<object, SqlDbType>(value, dbType);
+			return result;
+		}
+
+		public async Task<ResultHelper<IEnumerable<TResult>>> ExecuteComplexAllAsync<TResult, TRequest>(
+			TRequest request, string storedProcedure
+		)
+		{
+			ResultHelper<IEnumerable<TResult>> result = ValidateConnectionString<IEnumerable<TResult>>(
+				[], ConnectionString
+			);
+
+			if (result.Ok.False()) return result;
+
+			using (SqlConnection sqlConnection = new(ConnectionString))
+			{
+				using SqlCommand command = new(storedProcedure, sqlConnection);
+
+				DynamicParameters dynamicParameters = request.ParseDynamicParameters();
+				SqlParameter[] sqlParameters = dynamicParameters.ParseSqlParameters();
+
+				command.Parameters.AddRange(sqlParameters);
+				command.CommandType = CommandType.StoredProcedure;
+				command.CommandTimeout = 0;
+
+				try
+				{
+					sqlConnection.Open();
+
+					IEnumerable<TResult> results = await command.GetResultsAsync<TResult>();
+
+					result = ResultHelper<IEnumerable<TResult>>.Success(results);
+				}
+				catch (Exception e)
+				{
+					throw e;
+				}
+				finally
+				{
+					sqlConnection.Close();
+					SqlConnection.ClearPool(sqlConnection);
+				}
+			}
+
+			return result;
+		}
+
+		public ResultHelper<IEnumerable<IEnumerable<dynamic>>> QueryMultiple<TRequest>(
+			TRequest request, string storedProcedure
+		)
+		{
+			ResultHelper<IEnumerable<IEnumerable<dynamic>>> result = ValidateConnectionString<IEnumerable<IEnumerable<dynamic>>>(
+				[], ConnectionString
+			);
+
+			if (result.Ok.False()) return result;
+
+			DynamicParameters dynamicParameters = request.ParseDynamicParameters();
+
+			using SqlConnection sqlConnection = new(ConnectionString);
+
+			try
+			{
+				List<IEnumerable<dynamic>> resultSets = [];
+
+				GridReader gridReader = sqlConnection.QueryMultiple(
+					storedProcedure, dynamicParameters, commandTimeout: 0, commandType: CommandType.StoredProcedure
+				);
+
+				while (!gridReader.IsConsumed)
+				{
+					resultSets.Add(gridReader.Read());
+				}
+
+				result = ResultHelper<IEnumerable<IEnumerable<dynamic>>>.Success(resultSets);
+			}
+			catch (Exception e)
+			{
+				result = ResultHelper<IEnumerable<IEnumerable<dynamic>>>.Fail(e);
+			}
+			finally
+			{
+				SqlConnection.ClearPool(sqlConnection);
+			}
+
+			return result;
+		}
+
+		public async Task<ResultHelper<IEnumerable<IEnumerable<dynamic>>>> QueryMultipleAsync<TRequest>(
+			TRequest request, string storedProcedure
+		)
+		{
+			ResultHelper<IEnumerable<IEnumerable<dynamic>>> result = ValidateConnectionString<IEnumerable<IEnumerable<dynamic>>>(
+				[], ConnectionString
+			);
+
+			if (result.Ok.False()) return result;
+
+			DynamicParameters dynamicParameters = request.ParseDynamicParameters();
+
+			using SqlConnection sqlConnection = new(ConnectionString);
+
+			try
+			{
+				List<IEnumerable<dynamic>> resultSets = [];
+
+				GridReader gridReader = await sqlConnection.QueryMultipleAsync(
+					storedProcedure, dynamicParameters, commandTimeout: 0, commandType: CommandType.StoredProcedure
+				);
+
+				while (!gridReader.IsConsumed)
+				{
+					resultSets.Add(gridReader.Read());
+				}
+
+				result = ResultHelper<IEnumerable<IEnumerable<dynamic>>>.Success(resultSets);
+			}
+			catch (Exception e)
+			{
+				result = ResultHelper<IEnumerable<IEnumerable<dynamic>>>.Fail(e);
+			}
+			finally
+			{
+				SqlConnection.ClearPool(sqlConnection);
+			}
+
+			return result;
+		}
+
+		private ResultHelper<TResult> ValidateConnectionString<TResult>(
+			TResult result, string connectionString
+		)
+		{
+			bool isEmpty = connectionString.IsEmpty();
+
+			if (isEmpty) return ResultHelper<TResult>.Fail(
+				"The connection string wasn't initilized yet"
+			);
+
+			return ResultHelper<TResult>.Success(result);
 		}
 	}
 }

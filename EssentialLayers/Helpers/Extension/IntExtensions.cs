@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Linq;
 
 namespace EssentialLayers.Helpers.Extension
 {

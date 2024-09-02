@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace EssentialLayers.Helpers.Extension
 {
@@ -59,7 +61,7 @@ namespace EssentialLayers.Helpers.Extension
 			return new Regex(pattern).Replace(self, replacement);
 		}
 
-		public static string Capitalize(this string? self, string separator = " ")
+		public static string Capitalize(this string self, string separator = " ")
 		{
 			string[] result = [];
 
@@ -145,6 +147,19 @@ namespace EssentialLayers.Helpers.Extension
 			if (self.IsEmpty()) return string.Empty.PadRight(length);
 
 			return self.Length <= length ? self.PadLeft(length) : self[..length];
+		}
+
+		public static string RemoveDiacritics(this string self)
+		{
+			char[] replacement = ['a', 'a', 'e', 'e', 'i', 'i', 'n', 'o', 'o', 'A', 'E', 'I', 'O', 'U'];
+			char[] accents = ['à', 'á', 'é', 'è', 'ì', 'í', 'ñ', 'ò', 'ó', 'Á', 'É', 'Í', 'Ó', 'Ú'];
+
+			for (int i = 0; i < accents.Length; i++)
+			{
+				self = self.Replace(accents[i], replacement[i]);
+			}
+
+			return self;
 		}
 	}
 }

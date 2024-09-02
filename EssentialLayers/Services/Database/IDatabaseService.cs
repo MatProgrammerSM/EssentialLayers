@@ -1,31 +1,51 @@
 ﻿using EssentialLayers.Helpers.Result;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace EssentialLayers.Services.Database
 {
 	public interface IDatabaseService
 	{
-		ResultHelper<TResult> Get<TResult, TRequest>(
-			TRequest request, string storeProcedure
-		) where TResult : Response;
+		void SetConnectionString(string connectionString);
 
-		Task<ResultHelper<TResult>> GetAsync<TResult, TRequest>(
-			TRequest request, string storeProcedure
-		) where TResult : Response;
+		ResultHelper<TResult> Execute<TResult, TRequest>(
+			TRequest request, string storedProcedure
+		);
 
-		ResultHelper<IEnumerable<TResult>> GetAll<TResult, TRequest>(
-			TRequest request, string storeProcedure
-		) where TResult : Response;
+		Task<ResultHelper<TResult>> ExecuteAsync<TResult, TRequest>(
+			TRequest request, string storedProcedure
+		);
 
-		Task<ResultHelper<IEnumerable<TResult>>> GetAllAsync<TResult, TRequest>(
-			TRequest request, string storeProcedure
-		) where TResult : Response;
+		ResultHelper<IEnumerable<TResult>> ExecuteAll<TResult, TRequest>(
+			TRequest request, string storedProcedure
+		);
 
-		Task<ResultHelper<TResult>> GetCombinedAsync<TResult, TRequest>(
-			string storedProcedure, TRequest request
-		) where TResult : Response;
+		Task<ResultHelper<IEnumerable<TResult>>> ExecuteAllAsync<TResult, TRequest>(
+			TRequest request, string storedProcedure
+		);
 
-		Task<ResultHelper<IList<TResult>>> GetAllCombinedAsync<TResult, TRequest>(
-			string storedProcedure, TRequest request
-		) where TResult : Response;
+		ResultHelper<TResult> ExecuteComplex<TResult, TRequest>(
+			TRequest request, string storedProcedure
+		);
+
+		Task<ResultHelper<TResult>> ExecuteComplexAsync<TResult, TRequest>(
+			TRequest request, string storedProcedure
+		);
+
+		ResultHelper<IEnumerable<TResult>> ExecuteComplexAll<TResult, TRequest>(
+			TRequest request, string storedProcedure
+		);
+
+		Task<ResultHelper<IEnumerable<TResult>>> ExecuteComplexAllAsync<TResult, TRequest>(
+			TRequest request, string storedProcedure
+		);
+
+		ResultHelper<IEnumerable<IEnumerable<dynamic>>> QueryMultiple<TRequest>(
+			TRequest request, string storedProcedure
+		);
+
+		Task<ResultHelper<IEnumerable<IEnumerable<dynamic>>>> QueryMultipleAsync<TRequest>(
+			TRequest request, string storedProcedure
+		);
 	}
 }

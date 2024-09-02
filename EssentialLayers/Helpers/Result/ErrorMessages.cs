@@ -1,4 +1,9 @@
-﻿namespace EssentialLayers.Helpers.Result
+﻿using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
+
+namespace EssentialLayers.Helpers.Result
 {
 	public sealed class ErrorMessages
 	{

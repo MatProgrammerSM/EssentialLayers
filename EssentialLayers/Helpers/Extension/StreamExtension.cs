@@ -1,4 +1,7 @@
-﻿namespace EssentialLayers.Helpers.Extension
+﻿using System;
+using System.IO;
+
+namespace EssentialLayers.Helpers.Extension
 {
 	public static class StreamExtension
 	{
@@ -20,7 +23,7 @@
 			return memoryStream;
 		}
 
-		public static async Task WriteFileAsync(
+		public static void WriteFile(
 			this Stream stream, string fullpath, string filename, Extension extension
 		)
 		{
@@ -29,9 +32,9 @@
 				using MemoryStream memoryStream = new();
 				stream.CopyTo(memoryStream);
 
-				string path = $"{fullpath}{filename}.{(extension.GetType().Name.ToLower())}";
-								
-				await File.WriteAllBytesAsync(path, memoryStream.ToArray());
+				string path = $"{fullpath}{filename}.{extension.GetType().Name.ToLower()}";
+
+				File.WriteAllBytes(path, memoryStream.ToArray());
 			}
 			catch (Exception e)
 			{

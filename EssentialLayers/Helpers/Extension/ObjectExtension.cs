@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace EssentialLayers.Helpers.Extension
 {
@@ -12,7 +14,7 @@ namespace EssentialLayers.Helpers.Extension
 			foreach (PropertyInfo property in properties)
 			{
 				string key = property.Name;
-				TValue? value = (TValue)property.GetValue(self, null)!;
+				TValue value = (TValue)property.GetValue(self, null)!;
 
 				result.Add(new KeyValuePair<string, TValue>(key, value));
 			}

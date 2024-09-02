@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using EssentialLayers.Helpers.Logger;
+using System;
 using System.Runtime.CompilerServices;
 
 namespace EssentialLayers.Helpers.Result
@@ -17,20 +18,20 @@ namespace EssentialLayers.Helpers.Result
 
 		public static ResultHelper<T> Fail(
 			Exception e,
-			[CallerFilePath] string? file = null, 
-			[CallerMemberName] string? member = null,
+			[CallerFilePath] string file = null,
+			[CallerMemberName] string member = null,
 			[CallerLineNumber] int lineNumber = 0
 		)
 		{
 			Type type = e.GetType();
 
-			if (ErrorMessages.Messages.TryGetValue(type, out string? userMessage))
+			if (ErrorMessages.Messages.TryGetValue(type, out string message))
 			{
-				Debug.WriteLine(
-					$" ResultHelper - File: {file} | Member: {member} | Line Number: {lineNumber} - [{e.Message}]"
+				LoggerHelper.Error(
+					e, $" ResultHelper - File: {file} | Member: {member} | Line Number: {lineNumber} - [{e.Message}]"
 				);
 
-				if (userMessage != null) return new ResultHelper<T>(false, userMessage, default!);
+				if (message != null) return new ResultHelper<T>(false, message, default!);
 			}
 
 			return new ResultHelper<T>(

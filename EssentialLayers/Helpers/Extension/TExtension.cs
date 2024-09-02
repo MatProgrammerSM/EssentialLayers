@@ -1,5 +1,8 @@
 ﻿using Dapper;
+using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 
@@ -26,11 +29,16 @@ namespace EssentialLayers.Helpers.Extension
 			}
 		}
 
-		public static string Serialize<T>(this T self)
+		public static string Serialize<T>(this T self, bool ident = false)
 		{
 			try
 			{
-				return JsonSerializer.Serialize(self);
+				return JsonSerializer.Serialize(
+					self, new JsonSerializerOptions
+					{
+						WriteIndented = ident,
+					}
+				);
 			}
 			catch (Exception e)
 			{
@@ -73,7 +81,7 @@ namespace EssentialLayers.Helpers.Extension
 
 				foreach (string propertyName in propertyNames)
 				{
-					PropertyInfo? property = properties.FirstOrDefault(p => p.Name == propertyName);
+					PropertyInfo property = properties.FirstOrDefault(p => p.Name == propertyName);
 
 					if (!string.IsNullOrEmpty(propertyName)) return (T)property!.GetValue(obj)!;
 				}
@@ -97,8 +105,8 @@ namespace EssentialLayers.Helpers.Extension
 			properties.ForEach(
 				property =>
 				{
-					object? value = property.GetValue(self);
-					string? fullName = property.PropertyType.FullName;
+					object value = property.GetValue(self);
+					string fullName = property.PropertyType.FullName;
 
 					DbType? dbType = DbTypeToCSharpTypes[fullName!];
 
@@ -132,9 +140,20 @@ namespace EssentialLayers.Helpers.Extension
 			{"System.DateTimeOffset", DbType.DateTimeOffset}
 		};
 
-		public static bool NotEquals<T, K>(this T? self, K? other)
+		public static bool NotEquals<T, K>(this T self, K other)
 		{
-			return !self.Equals(other);
+			string serializedSelf = self.Serialize();
+			string serializedOther = other.Serialize();
+
+			return !serializedSelf.Equals(serializedOther);
+		}
+
+		public static bool AreEquals<T, K>(this T self, K other)
+		{
+			string serializedSelf = self.Serialize();
+			string serializedOther = other.Serialize();
+
+			return serializedSelf.Equals(serializedOther);
 		}
 	}
 }
