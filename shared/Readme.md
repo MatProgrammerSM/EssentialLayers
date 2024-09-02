@@ -12,19 +12,15 @@ Steps to use:
 
 	To set Connection String of Azure Blob:
 
-	app.Services.GetService<IAzureBlobService>()!.SetConnectionString(
-		CONNECTION_STRING_BLOBS
-	);
+	app.Services.ConfigureAzureBlob(CONNECTION_STRING_BLOBS);
 
 	To set Connection String of Database Service:
 
-	app.Services.GetService<IDatabaseService>()!.SetConnectionString(
-		ConnectionString
-	);
+	app.Services.ConfigureDatabase(ConnectionString);
 
 	To set App info or bearer token of Web:
 
-	app.Services.GetService<IDatabaseService>()!.SetOptions(
+	app.Services.ConfigureHttp(
 		new HttpWebServiceOption
 		{
 			AppName = "LicensesApp",
@@ -32,3 +28,7 @@ Steps to use:
 			BearerToken = Bearer_Token
 		}	
 	);
+
+	or
+										
+	app.Services.ConfigureHttpToken(BEARER_TOKEN);

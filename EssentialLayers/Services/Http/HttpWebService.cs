@@ -23,7 +23,12 @@ namespace EssentialLayers.Services.Http
 
 		/**/
 
-		private HttpWebServiceOption HttpWebHelperOption;
+		private HttpWebServiceOption HttpWebHelperOption = new()
+		{
+			AppName = "AppName",
+			AppVersion = "1.0",
+			BearerToken = string.Empty
+		};
 
 		/**/
 
@@ -32,6 +37,10 @@ namespace EssentialLayers.Services.Http
 			HttpWebHelperOption = httpWebHelperOption;
 		}
 
+		public void SetToken(string bearerToken)
+		{
+			HttpWebHelperOption.BearerToken = bearerToken;
+		}
 
 		public async Task<HttpWebResponse<TResult>> GetAsync<TResult, TRequest>(
 			TRequest request, string url, RequestOptions options = null
@@ -137,7 +146,7 @@ namespace EssentialLayers.Services.Http
 			httpRequestMessage.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 			httpRequestMessage.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
 
-			if (!string.IsNullOrEmpty(options.BearerToken))
+			if (!string.IsNullOrEmpty(bearerToken))
 			{
 				httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue(
 					"Bearer", bearerToken

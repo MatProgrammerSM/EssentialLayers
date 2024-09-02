@@ -2,9 +2,11 @@
 
 namespace EssentialLayers.Services.Http
 {
-    public interface IHttpWebService
+	public interface IHttpWebService
 	{
 		void SetOptions(HttpWebServiceOption httpWebHelperOption);
+
+		void SetToken(string bearerToken);
 
 		Task<HttpWebResponse<TResult>> GetAsync<TResult, TRequest>(
 			TRequest request, string url, RequestOptions options = null

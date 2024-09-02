@@ -1,45 +1,67 @@
-﻿using EssentialLayers.Helpers.Extension;
-using EssentialLayers.Services.Blob;
+﻿using EssentialLayers.Services.Blob;
 using EssentialLayers.Services.Database;
 using EssentialLayers.Services.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 
 namespace EssentialLayers
 {
 	public static class Startup
 	{
-		public static IServiceCollection AddEssentialAzureBlob(
-			this IServiceCollection services, Action<string> configure = null
+		public static IServiceCollection AddEssentialLayers(
+			this IServiceCollection services
 		)
 		{
-			services.AddSingleton<IAzureBlobService, AzureBlobService>();
-
-			if (configure.NotNull()) services.Configure(configure);
+			services.TryAddSingleton<IAzureBlobService, AzureBlobService>();
+			services.TryAddSingleton<IDatabaseService, DatabaseService>();
+			services.TryAddSingleton<IHttpWebService, HttpWebService>();
 
 			return services;
 		}
-		
-		public static IServiceCollection AddEssentialDatabase(
-			this IServiceCollection services, Action<HttpWebServiceOption> configure = null
+
+		public static IAzureBlobService ConfigureAzureBlob(
+			this IServiceProvider provider, string connectionString = null
 		)
 		{
-			services.AddSingleton<IDatabaseService, DatabaseService>();
+			IAzureBlobService service = provider.GetRequiredService<IAzureBlobService>();
 
-			if (configure.NotNull()) services.Configure(configure);
-			
-			return services;
+			service.SetConnectionString(connectionString);
+
+			return service;
 		}
 
-		public static IServiceCollection AddEssentialHttp(
-			this IServiceCollection services, Action<HttpWebServiceOption> configure = null
+		public static IDatabaseService ConfigureDatabase(
+			this IServiceProvider provider, string connectionString = null
 		)
 		{
-			services.AddSingleton<IHttpWebService, HttpWebService>();
+			IDatabaseService service = provider.GetRequiredService<IDatabaseService>();
 
-			if (configure.NotNull()) services.Configure(configure);
+			service.SetConnectionString(connectionString);
 
-			return services;
+			return service;
+		}
+
+		public static IHttpWebService ConfigureHttp(
+			this IServiceProvider provider, HttpWebServiceOption options
+		)
+		{
+			IHttpWebService service = provider.GetRequiredService<IHttpWebService>();
+
+			service.SetOptions(options);
+
+			return service;
+		}
+
+		public static IHttpWebService ConfigureHttpToken(
+			this IServiceProvider provider, string bearerToken
+		)
+		{
+			IHttpWebService service = provider.GetRequiredService<IHttpWebService>();
+
+			service.SetToken(bearerToken);
+
+			return service;
 		}
 	}
 }
