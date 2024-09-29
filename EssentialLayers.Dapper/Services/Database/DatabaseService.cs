@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using EssentialLayers.Dapper.Extensions;
 using EssentialLayers.Helpers.Extension;
 using EssentialLayers.Helpers.Result;
 using Microsoft.Data.SqlClient;
@@ -9,11 +10,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using static Dapper.SqlMapper;
 
-namespace EssentialLayers.Services.Database
+namespace EssentialLayers.Dapper.Services.Database
 {
 	internal class DatabaseService : IDatabaseService
 	{
-		private string ConnectionString;
+		private string ConnectionString = string.Empty;
 
 		/**/
 
@@ -36,7 +37,7 @@ namespace EssentialLayers.Services.Database
 
 			try
 			{
-				DynamicParameters dynamicParameters = request.ParseDynamic();
+				DynamicParameters dynamicParameters = request.ParseDynamicParameters();
 
 				TResult query = sqlConnection.QueryFirst<TResult>(
 					storedProcedure, dynamicParameters, commandTimeout: 0,
@@ -71,7 +72,7 @@ namespace EssentialLayers.Services.Database
 
 			try
 			{
-				DynamicParameters dynamicParameters = request.ParseDynamic();
+				DynamicParameters dynamicParameters = request.ParseDynamicParameters();
 
 				TResult query = await sqlConnection.QueryFirstAsync<TResult>(
 					storedProcedure, dynamicParameters, commandTimeout: 0,
@@ -106,7 +107,7 @@ namespace EssentialLayers.Services.Database
 
 			try
 			{
-				DynamicParameters dynamicParameters = request.ParseDynamic();
+				DynamicParameters dynamicParameters = request.ParseDynamicParameters();
 
 				IEnumerable<TResult> query = sqlConnection.Query<TResult>(
 					storedProcedure, dynamicParameters, commandTimeout: 0,
@@ -141,7 +142,7 @@ namespace EssentialLayers.Services.Database
 
 			try
 			{
-				DynamicParameters dynamicParameters = request.ParseDynamic();
+				DynamicParameters dynamicParameters = request.ParseDynamicParameters();
 
 				IEnumerable<TResult> query = await sqlConnection.QueryAsync<TResult>(
 					storedProcedure, dynamicParameters, commandTimeout: 0,
@@ -334,7 +335,7 @@ namespace EssentialLayers.Services.Database
 			return result;
 		}
 
-		public ResultHelper<IEnumerable<IEnumerable<dynamic>>> QueryMultiple<TRequest>(
+		public ResultHelper<IEnumerable<IEnumerable<dynamic>>> ExecuteMultiple<TRequest>(
 			TRequest request, string storedProcedure
 		)
 		{
@@ -375,7 +376,7 @@ namespace EssentialLayers.Services.Database
 			return result;
 		}
 
-		public async Task<ResultHelper<IEnumerable<IEnumerable<dynamic>>>> QueryMultipleAsync<TRequest>(
+		public async Task<ResultHelper<IEnumerable<IEnumerable<dynamic>>>> ExecuteMultipleAsync<TRequest>(
 			TRequest request, string storedProcedure
 		)
 		{

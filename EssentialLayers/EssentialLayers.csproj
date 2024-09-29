@@ -3,19 +3,20 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
 		<LangVersion>12.0</LangVersion>
-		<Description>Essential layers to start a project from scratch with a structure designed in Dapper, Results, Cache, Error-handling, Logger, Blobs, Helpers, Extensions and web requests</Description>
-		<Product>MSoto Company</Product>
+		<Description>Essential layers to start a project from scratch with a structure designed in Results, Cache, Error-handling, Logger, Blobs, Helpers, Extensions and Web Requests</Description>
+		<Product>EssentialLayers</Product>
 		<Company>MSoto Company</Company>
-		<Copyright>msotomor</Copyright>
+		<Copyright>mariosotomor.dev@gmail.com</Copyright>
 		<PackageProjectUrl>https://essentiallayers.dev</PackageProjectUrl>
 		<PackageIcon>essential-layers.png</PackageIcon>
 		<RepositoryUrl>https://github.com/MatProgrammerSM/EssentialLayers</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>Dapper Results Cache Error Handling Blobs Helpers Exstension Web-Requests</PackageTags>
+		<PackageTags>Result-Handling Cache Error-Handling Blobs Helpers Exstension Web-Requests</PackageTags>
 		<PackageReadmeFile>Readme.md</PackageReadmeFile>
-		<Version>1.1.9</Version>
+		<Version>1.2.0</Version>
 		<Title>Essential Layers</Title>
-		<PackageReleaseNotes>It was tested the Azure, Database and Http services</PackageReleaseNotes>
+		<PackageReleaseNotes>It was uncoupled Dapper to a new package called EssentialLayers.Dapper</PackageReleaseNotes>
+		<Authors>MSotoMoreno</Authors>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -23,19 +24,21 @@
 	    <Pack>True</Pack>
 	    <PackagePath>\</PackagePath>
 	  </None>
-	  <None Include="..\shared\Readme.md">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Azure.Storage.Blobs" Version="12.21.2" />
-		<PackageReference Include="Dapper" Version="2.1.35" />
-		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-		<PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
+		<PackageReference Include="Azure.Storage.Blobs" Version="12.22.1" />
 		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.1.0" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.1.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Readme.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
 	</ItemGroup>
 
 </Project>

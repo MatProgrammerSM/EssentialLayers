@@ -5,7 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 
-namespace EssentialLayers.Helpers.Extension
+namespace EssentialLayers.Dapper.Extensions
 {
 	public static class DapperExtension
 	{

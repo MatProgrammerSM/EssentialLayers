@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace EssentialLayers.Services.Database
+namespace EssentialLayers.Dapper.Services.Database
 {
 	public interface IDatabaseService
 	{
-		void SetConnectionString(string connectionString);
+		internal void SetConnectionString(string connectionString);
 
 		ResultHelper<TResult> Execute<TResult, TRequest>(
 			TRequest request, string storedProcedure
@@ -40,11 +40,11 @@ namespace EssentialLayers.Services.Database
 			TRequest request, string storedProcedure
 		);
 
-		ResultHelper<IEnumerable<IEnumerable<dynamic>>> QueryMultiple<TRequest>(
+		ResultHelper<IEnumerable<IEnumerable<dynamic>>> ExecuteMultiple<TRequest>(
 			TRequest request, string storedProcedure
 		);
 
-		Task<ResultHelper<IEnumerable<IEnumerable<dynamic>>>> QueryMultipleAsync<TRequest>(
+		Task<ResultHelper<IEnumerable<IEnumerable<dynamic>>>> ExecuteMultipleAsync<TRequest>(
 			TRequest request, string storedProcedure
 		);
 	}

@@ -1,5 +1,4 @@
 ﻿using EssentialLayers.Services.Blob;
-using EssentialLayers.Services.Database;
 using EssentialLayers.Services.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -14,7 +13,6 @@ namespace EssentialLayers
 		)
 		{
 			services.TryAddSingleton<IAzureBlobService, AzureBlobService>();
-			services.TryAddSingleton<IDatabaseService, DatabaseService>();
 			services.TryAddSingleton<IHttpWebService, HttpWebService>();
 
 			return services;
@@ -25,17 +23,6 @@ namespace EssentialLayers
 		)
 		{
 			IAzureBlobService service = provider.GetRequiredService<IAzureBlobService>();
-
-			service.SetConnectionString(connectionString);
-
-			return service;
-		}
-
-		public static IDatabaseService ConfigureDatabase(
-			this IServiceProvider provider, string connectionString = null
-		)
-		{
-			IDatabaseService service = provider.GetRequiredService<IDatabaseService>();
 
 			service.SetConnectionString(connectionString);
 
