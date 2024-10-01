@@ -8,7 +8,7 @@ It is compatible with almost any project created with . Net in C#, that is, it a
 ### Configure Packages
 This solution contains two indpendent packages, to leave to the final user, choosing the way of working, based in their necesities.
 
-### [EssentialLayers](/EssentialLayers/tree/master/EssentialLayers/Readme.md)
+### [EssentialLayers](/EssentialLayers/Readme.md)
 
 Available layers to start a project with the most common base functionalities.
 
@@ -16,24 +16,24 @@ Available layers to start a project with the most common base functionalities.
 
 | Layer     | Description |
 | :------   | :- |
-| [Result](/EssentialLayers/tree/master/EssentialLayers/Helpers/Result) | It is used for error handling, results and exception control. |
-| [Cache](/EssentialLayers/tree/master/EssentialLayers/Helpers/Cache) | The quickest way to implement cache. |
-| [Extension](/EssentialLayers/tree/master/EssentialLayers/Helpers/Extension) | List of methods clasified by data type to extends the functionality and make language more readable. |
-| [Logger](/EssentialLayers/tree/master/EssentialLayers/Helpers/Logger) | manage the essential methods at the app logger. |
+| [Result](/EssentialLayers/Helpers/Result) | It is used for error handling, results and exception control. |
+| [Cache](/EssentialLayers/Helpers/Cache) | The quickest way to implement cache. |
+| [Extension](EssentialLayers/Helpers/Extension) | List of methods clasified by data type to extends the functionality and make language more readable. |
+| [Logger](/EssentialLayers/Helpers/Logger) | manage the essential methods at the app logger. |
 
 #### Services
 | Layer     | Description |
 | :------   | :- |
-| [Blob](/EssentialLayers/tree/master/EssentialLayers/Helpers/Result) | Managment of blobs from the app, using different functionalities like read, upload and delete files or containers.  |
-| [Token](/EssentialLayers/tree/master/EssentialLayers/Helpers/Token) | To the creation of JWT tokens from a eassier way. |
-| [Http](/EssentialLayers/tree/master/EssentialLayers/Helpers/Http) | Is the tipical htttp request, but only with the essential configs. |
+| [Blob](/EssentialLayers/Helpers/Result) | Managment of blobs from the app, using different functionalities like read, upload and delete files or containers.  |
+| [Token](/EssentialLayers/Helpers/Token) | To the creation of JWT tokens from a eassier way. |
+| [Http](/EssentialLayers/Helpers/Http) | Is the tipical htttp request, but only with the essential configs. |
 
 
-### [EssentialLayers.Dapper](/EssentialLayers/tree/master/EssentialLayers.Dapper/Readme.md)
+### [EssentialLayers.Dapper](/EssentialLayers.Dapper/Readme.md)
 Complementary layer to integrate the use of Dapper in your project and add the use of a database SQL Server.
 
 #### Services
 | Layer     | Description                   |
 | :------   | :- |
-| [Estension](/EssentialLayers/tree/master/EssentialLayers.Dapper/Estension) | List of methods to extends the functionality of dapper. |
-| [Database](/EssentialLayers/tree/master/EssentialLayers.Dapper/Services/Database) | List of descriptive methods, to use with stored procedures. |
+| [Estension](/EssentialLayers.Dapper/Estension) | List of methods to extends the functionality of dapper. |
+| [Database](/EssentialLayers.Dapper/Services/Database) | List of descriptive methods, to use with stored procedures. |
