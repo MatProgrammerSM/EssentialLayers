@@ -24,9 +24,9 @@ Available layers to start a project with the most common base functionalities.
 #### Services
 | Layer     | Description |
 | :------   | :- |
-| [Blob](/EssentialLayers/Helpers/Result) | Managment of blobs from the app, using different functionalities like read, upload and delete files or containers.  |
-| [Token](/EssentialLayers/Helpers/Token) | To the creation of JWT tokens from a eassier way. |
-| [Http](/EssentialLayers/Helpers/Http) | Is the tipical htttp request, but only with the essential configs. |
+| [Blob](/EssentialLayers/Services/Blob) | Managment of blobs from the app, using different functionalities like read, upload and delete files or containers.  |
+| [Token](/EssentialLayers/Services/Token) | To the creation of JWT tokens from a eassier way. |
+| [Http](/EssentialLayers/Services/Http) | Is the tipical htttp request, but only with the essential configs. |
 
 
 ### [EssentialLayers.Dapper](/EssentialLayers.Dapper/Readme.md)
