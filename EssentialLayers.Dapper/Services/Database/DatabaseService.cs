@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using EssentialLayers.Dapper.Extensions;
+using EssentialLayers.Dapper.Extension;
 using EssentialLayers.Helpers.Extension;
 using EssentialLayers.Helpers.Result;
 using Microsoft.Data.SqlClient;

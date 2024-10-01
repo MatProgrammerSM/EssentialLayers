@@ -9,7 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace EssentialLayers.Dapper.Extensions
+namespace EssentialLayers.Dapper.Extension
 {
 	public static class SqlCommandExtension
 	{
