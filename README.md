@@ -1,9 +1,9 @@
-<image src="https://github.com/MatProgrammerSM/EssentialLayers/blob/master/shared/essential-layers.png" width="50" />
+<image src="https://github.com/MatProgrammerSM/EssentialLayers/blob/master/shared/essential-layers.png" width="65" />
 
 # Essential Layers
 Essential layers is a library based in a `way of work functional to start a project from scratch` with a structure designed with Result handling, Cache, Error handling, Blobs, Helpers, Extensions and Web Requests.
 
-It is compatible with almost any project created with . Net in C#, that is, it adapts to Mobile Development projects, Web, API and desktop projects.
+It's compatible with almost any project created with . Net in C#, that is, it adapts to Mobile Development projects, Web, API and desktop projects.
 
 ### Configure Packages
 This solution contains two indpendent packages, to leave to the final user, choosing the way of working, based in their necesities.
@@ -35,5 +35,5 @@ Complementary layer to integrate the use of Dapper in your project and add the u
 #### Services
 | Layer     | Description                   |
 | :------   | :- |
-| [Estension](/EssentialLayers.Dapper/Estension) | List of methods to extends the functionality of dapper. |
+| [Extension](/EssentialLayers.Dapper/Extension) | List of methods to extends the functionality of dapper. |
 | [Database](/EssentialLayers.Dapper/Services/Database) | List of descriptive methods, to use with stored procedures. |
