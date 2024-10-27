@@ -3,20 +3,20 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
 		<LangVersion>12.0</LangVersion>
-		<Description>Essential layers to start a project from scratch with a structure designed in Results, Cache, Error-handling, Logger, Blobs, Helpers, Extensions and Web Requests</Description>
-		<Product>EssentialLayers</Product>
-		<Company>MSoto Company</Company>
+		<Description>Essential.Layers is a library based in a `way of work functional to start a project from scratch` with a structure designed with Result handling, Cache, Error handling, Helpers, JWT Token &amp; Extensions.</Description>
+		<Product>$(AssemblyName)</Product>
+		<Company>Mario Soto Moreno Co</Company>
 		<Copyright>mariosotomor.dev@gmail.com</Copyright>
 		<PackageProjectUrl>https://essentiallayers.dev</PackageProjectUrl>
 		<PackageIcon>essential-layers.png</PackageIcon>
 		<RepositoryUrl>https://github.com/MatProgrammerSM/EssentialLayers</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>Result-Handling Cache Error-Handling Blobs Helpers Exstension Web-Requests</PackageTags>
+		<PackageTags>Result-Handling Cache Error-Handling Helpers JWT-Token Exstension</PackageTags>
 		<PackageReadmeFile>Readme.md</PackageReadmeFile>
-		<Version>1.2.0</Version>
-		<Title>Essential Layers</Title>
-		<PackageReleaseNotes>It was uncoupled Dapper to a new package called EssentialLayers.Dapper</PackageReleaseNotes>
-		<Authors>MSotoMoreno</Authors>
+		<Version>1.3.0</Version>
+		<Title>$(AssemblyName)</Title>
+		<PackageReleaseNotes>It was uncoupled Azure Blobs &amp; HttpWebService to a new packages called EssentialLayers.AzureBlobs &amp; EssentialLayers.Request</PackageReleaseNotes>
+		<Authors>MSoto</Authors>
 	</PropertyGroup>
 
 	<ItemGroup>

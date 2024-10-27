@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EssentialLayers", "Essentia
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EssentialLayers.Dapper", "EssentialLayers.Dapper\EssentialLayers.Dapper.csproj", "{4D4A9BDF-6BF5-408C-967F-059589DD9C3A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EssentialLayers.Request", "EssentialLayers.Http\EssentialLayers.Request.csproj", "{2F7C627D-5BB3-475E-BD54-BB0A975FEA38}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EssentialLayers.AzureBlobs", "EssentialLayers.AzureBlobs\EssentialLayers.AzureBlobs.csproj", "{FA5CB3C4-A826-4E04-A8FB-938C2CDBD306}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EssentialLayers.AzureBlobs", "EssentialLayers.AzureBlobs\EssentialLayers.AzureBlobs.csproj", "{FA5CB3C4-A826-4E04-A8FB-938C2CDBD306}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EssentialLayers.Request", "EssentialLayers.Request\EssentialLayers.Request.csproj", "{52CF8370-E05A-4F8B-8F68-65200FCB5A5D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,14 +25,14 @@ Global
 		{4D4A9BDF-6BF5-408C-967F-059589DD9C3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D4A9BDF-6BF5-408C-967F-059589DD9C3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D4A9BDF-6BF5-408C-967F-059589DD9C3A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2F7C627D-5BB3-475E-BD54-BB0A975FEA38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2F7C627D-5BB3-475E-BD54-BB0A975FEA38}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2F7C627D-5BB3-475E-BD54-BB0A975FEA38}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2F7C627D-5BB3-475E-BD54-BB0A975FEA38}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FA5CB3C4-A826-4E04-A8FB-938C2CDBD306}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FA5CB3C4-A826-4E04-A8FB-938C2CDBD306}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA5CB3C4-A826-4E04-A8FB-938C2CDBD306}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA5CB3C4-A826-4E04-A8FB-938C2CDBD306}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52CF8370-E05A-4F8B-8F68-65200FCB5A5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52CF8370-E05A-4F8B-8F68-65200FCB5A5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52CF8370-E05A-4F8B-8F68-65200FCB5A5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52CF8370-E05A-4F8B-8F68-65200FCB5A5D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

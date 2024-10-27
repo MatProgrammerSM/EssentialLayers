@@ -1,6 +1,5 @@
-### To use the services provided:
-You need to configure an extra code to be available like a dependency in your project.
-
+# Essential Layers
+`EssentialLayers.AzureBlobs` is a complement to the package `EssentialLayers` to provide an extra layer to use Azure Blobs in an easy way.
 ```
 build.Services.UseAzureBlob();
 ```
