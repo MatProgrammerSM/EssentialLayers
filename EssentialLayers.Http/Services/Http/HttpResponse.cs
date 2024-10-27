@@ -2,23 +2,23 @@
 using System;
 using System.Net;
 
-namespace EssentialLayers.Services.Http
+namespace EssentialLayers.Request.Services.Http
 {
-	public class HttpWebResponse<T>(
+	public class HttpResponse<T>(
 		bool ok, string message, T data, HttpStatusCode httpStatusCode = HttpStatusCode.OK
 	) : ResultHelper<T>(ok, message, data)
 	{
 		public HttpStatusCode StatusCode { get; set; } = httpStatusCode;
 
-		public static HttpWebResponse<T> Success(
+		public static HttpResponse<T> Success(
 			T data, HttpStatusCode httpStatusCode
 		) => new(true, string.Empty, data, httpStatusCode);
 
-		public static HttpWebResponse<T> Fail(
+		public static HttpResponse<T> Fail(
 			string message, HttpStatusCode httpStatusCode
 		) => new(false, message, default!, httpStatusCode);
 
-		public static HttpWebResponse<T> Fail(Exception e, HttpStatusCode httpStatusCode)
+		public static HttpResponse<T> Fail(Exception e, HttpStatusCode httpStatusCode)
 		{
 			ResultHelper<T> result = Fail(e);
 

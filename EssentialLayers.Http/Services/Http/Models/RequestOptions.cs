@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 
-namespace EssentialLayers.Services.Http
+namespace EssentialLayers.Request.Services.Http.Models
 {
 	public class RequestOptions(bool isCached = false)
 	{

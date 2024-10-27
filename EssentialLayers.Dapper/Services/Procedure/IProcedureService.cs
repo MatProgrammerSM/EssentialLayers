@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace EssentialLayers.Dapper.Services.Database
+namespace EssentialLayers.Dapper.Services.Procedure
 {
-	public interface IDatabaseService
+	public interface IProcedureService
 	{
-		internal void SetConnectionString(string connectionString);
+		void SetConnectionString(string connectionString);
 
 		ResultHelper<TResult> Execute<TResult, TRequest>(
 			TRequest request, string storedProcedure

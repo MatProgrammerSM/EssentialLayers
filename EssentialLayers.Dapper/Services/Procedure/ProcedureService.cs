@@ -10,9 +10,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using static Dapper.SqlMapper;
 
-namespace EssentialLayers.Dapper.Services.Database
+namespace EssentialLayers.Dapper.Services.Procedure
 {
-	internal class DatabaseService : IDatabaseService
+	internal class ProcedureService : IProcedureService
 	{
 		private string ConnectionString = string.Empty;
 

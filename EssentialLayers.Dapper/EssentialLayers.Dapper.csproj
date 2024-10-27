@@ -36,8 +36,4 @@
 	    <PackagePath>\</PackagePath>
 	  </None>
 	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Helpers\" />
-	</ItemGroup>
 </Project>

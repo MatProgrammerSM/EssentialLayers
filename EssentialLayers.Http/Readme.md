@@ -5,12 +5,7 @@
 
 Add the dependencies in your **Program.cs** file
 ```
-builder.Services.UseDapper();
-```
-And then set the connection string
-
-```
-app.Services.ConfigureDapper(Connection_String);
+builder.Services.UseRequest();
 ```
 
 Created by [Mario Soto Moreno](https://github.com/MatProgrammerSM)

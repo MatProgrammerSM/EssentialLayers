@@ -9,13 +9,13 @@ using System.IO;
 using System.Threading.Tasks;
 using Response = Azure.Response;
 
-namespace EssentialLayers.Services.Blob
+namespace EssentialLayers.AzureBlobs.Services.Blob
 {
 	internal class AzureBlobService : IAzureBlobService
 	{
-		private BlobServiceClient BlobServiceClient;
+		private BlobServiceClient? BlobServiceClient;
 
-		private string ConnectionString;
+		private string? ConnectionString;
 
 		public void SetConnectionString(string connectionString)
 		{
@@ -28,16 +28,14 @@ namespace EssentialLayers.Services.Blob
 		)
 		{
 			ResultHelper<string> result = ValidateConnectionString(
-				string.Empty, ConnectionString
+				string.Empty, ConnectionString!
 			);
 
 			if (result.Ok.False()) return result;
 
 			try
 			{
-				BlobContainerClient blobContainerClient = BlobServiceClient.GetBlobContainerClient(container);
-
-				BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
+				BlobClient blobClient = GetBlobClient(container, fileName);
 				BinaryData binaryData = new(bytes);
 
 				Response<BlobContentInfo> uplaod = await blobClient.UploadAsync(binaryData, true);
@@ -60,15 +58,14 @@ namespace EssentialLayers.Services.Blob
 		)
 		{
 			ResultHelper<string> result = ValidateConnectionString(
-				string.Empty, ConnectionString
+				string.Empty, ConnectionString!
 			);
 
 			if (result.Ok.False()) return result;
 
 			try
 			{
-				BlobContainerClient blobContainerClient = BlobServiceClient.GetBlobContainerClient(container);
-				BlobClient blobClient = blobContainerClient.GetBlobClient(filepath);
+				BlobClient blobClient = GetBlobClient(container, filepath);
 
 				return ResultHelper<string>.Success(
 					$"{blobClient.Uri.AbsoluteUri}"
@@ -85,16 +82,14 @@ namespace EssentialLayers.Services.Blob
 		)
 		{
 			ResultHelper<string> result = ValidateConnectionString(
-				string.Empty, ConnectionString
+				string.Empty, ConnectionString!
 			);
 
 			if (result.Ok.False()) return result;
 
 			try
 			{
-				BlobContainerClient blobContainerClient = BlobServiceClient.GetBlobContainerClient(container);
-
-				BlobClient blobClient = blobContainerClient.GetBlobClient(filepath);
+				BlobClient blobClient = GetBlobClient(container, filepath);
 
 				using Response download = await blobClient.DownloadToAsync(filepath);
 
@@ -114,15 +109,14 @@ namespace EssentialLayers.Services.Blob
 		)
 		{
 			ResultHelper<byte[]> result = ValidateConnectionString<byte[]>(
-				[], ConnectionString
+				[], ConnectionString!
 			);
 
 			if (result.Ok.False()) return result;
 
 			try
 			{
-				BlobContainerClient blobContainerClient = BlobServiceClient.GetBlobContainerClient(container);
-				BlobClient blobClient = blobContainerClient.GetBlobClient(filepath);
+				BlobClient blobClient = GetBlobClient(container, filepath);
 
 				await using MemoryStream memoryStream = new();
 
@@ -146,14 +140,14 @@ namespace EssentialLayers.Services.Blob
 		)
 		{
 			ResultHelper<bool> result = ValidateConnectionString(
-				true, ConnectionString
+				true, ConnectionString!
 			);
 
 			if (result.Ok.False()) return result;
 
 			try
 			{
-				BlobContainerClient blobContainerClient = BlobServiceClient.GetBlobContainerClient(container);
+				BlobContainerClient blobContainerClient = BlobServiceClient!.GetBlobContainerClient(container);
 				Response<bool> deleted = await blobContainerClient.DeleteBlobIfExistsAsync(filepath);
 
 				if (deleted) return ResultHelper<bool>.Success(true);
@@ -172,14 +166,14 @@ namespace EssentialLayers.Services.Blob
 		)
 		{
 			ResultHelper<HashSet<BlobItem>> result = ValidateConnectionString<HashSet<BlobItem>>(
-				[], ConnectionString
+				[], ConnectionString!
 			);
 
 			if (result.Ok.False()) return result;
 
 			try
 			{
-				BlobContainerClient blobContainerClient = BlobServiceClient.GetBlobContainerClient(container);
+				BlobContainerClient blobContainerClient = BlobServiceClient!.GetBlobContainerClient(container);
 				AsyncPageable<BlobItem> blobItems = blobContainerClient.GetBlobsAsync(prefix: prefix);
 
 				HashSet<BlobItem> hashSet = [];
@@ -208,6 +202,14 @@ namespace EssentialLayers.Services.Blob
 			);
 
 			return ResultHelper<TResult>.Success(result);
+		}
+
+		private BlobClient GetBlobClient(string container, string filepath)
+		{
+			BlobContainerClient blobContainerClient = BlobServiceClient!.GetBlobContainerClient(container);
+			BlobClient blobClient = blobContainerClient.GetBlobClient(filepath);
+
+			return blobClient;
 		}
 	}
 }

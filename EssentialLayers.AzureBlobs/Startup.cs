@@ -1,26 +1,26 @@
-﻿using EssentialLayers.Dapper.Services.Procedure;
+﻿using EssentialLayers.AzureBlobs.Services.Blob;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 
-namespace EssentialLayers.Dapper
+namespace EssentialLayers.AzureBlobs
 {
 	public static class Startup
 	{
-		public static IServiceCollection UseDapper(
+		public static IServiceCollection UseAzureBlob(
 			this IServiceCollection services
 		)
 		{
-			services.TryAddScoped<IProcedureService, ProcedureService>();
+			services.TryAddScoped<IAzureBlobService, AzureBlobService>();
 
 			return services;
 		}
 
-		public static IProcedureService ConfigureDapper(
+		public static IAzureBlobService ConfigureAzureBlob(
 			this IServiceProvider provider, string connectionString
 		)
 		{
-			IProcedureService service = provider.GetRequiredService<IProcedureService>();
+			IAzureBlobService service = provider.GetRequiredService<IAzureBlobService>();
 
 			service.SetConnectionString(connectionString);
 
