@@ -35,6 +35,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Update="Helpers\Readme.md">
+	    <PackagePath>\</PackagePath>
+	    <Pack>True</Pack>
+	  </None>
 	  <None Update="Readme.md">
 	    <Pack>True</Pack>
 	    <PackagePath>\</PackagePath>

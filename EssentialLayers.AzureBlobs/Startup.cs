@@ -7,7 +7,7 @@ namespace EssentialLayers.AzureBlobs
 {
 	public static class Startup
 	{
-		public static IServiceCollection UseAzureBlob(
+		public static IServiceCollection UseAzureBlobs(
 			this IServiceCollection services
 		)
 		{
@@ -16,7 +16,7 @@ namespace EssentialLayers.AzureBlobs
 			return services;
 		}
 
-		public static IAzureBlobService ConfigureAzureBlob(
+		public static IAzureBlobService ConfigureAzureBlobs(
 			this IServiceProvider provider, string connectionString
 		)
 		{

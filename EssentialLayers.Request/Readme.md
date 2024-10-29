@@ -1,5 +1,7 @@
 # Essential Layers
-`EssentialLayers.Request` is a complement to the package `EssentialLayers` to provide an extra layer for using http requests in an easy way.
+### EssentialLayers.Request
+
+Is a complement to the package `EssentialLayers` to provide an extra layer for using http requests in an easy way.
 
 ### Configure
 
