@@ -22,7 +22,7 @@ It is a layer that performs the management of the blob service of azure, offers 
 #### Services
 | Service | Description |
 | :- | :- |
-| [Blobs](/EssentialLayers.AzureBlobs/Services/AzureBlobs/Blob/Readme.md) | List of methods to extends the functionality of Azure Blobs. |
+| [Blobs](/EssentialLayers.AzureBlobs/Services/Blob/Readme.md) | List of methods to extends the functionality of Azure Blobs. |
 
 ### [EssentialLayers.Dapper](/EssentialLayers.Dapper/Readme.md)
 It is a layer to integrate the use of Dapper in your project and add the use of a database SQL Server.
@@ -31,4 +31,4 @@ It is a layer to integrate the use of Dapper in your project and add the use of 
 | Service | Description |
 | :- | :- |
 | [Extension](/EssentialLayers.Dapper/Extension) | List of methods to extends the functionality of dapper. |
-| [Database](/EssentialLayers.Dapper/Services/Database) | List of descriptive methods, to use with stored procedures. |
+| [Procedure](/EssentialLayers.Dapper/Services/Procedure) | List of descriptive methods, to use with stored procedures. |
