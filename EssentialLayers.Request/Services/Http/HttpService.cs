@@ -1,5 +1,6 @@
 ﻿using EssentialLayers.Helpers.Extension;
 using EssentialLayers.Request.Helpers;
+using EssentialLayers.Request.Services.Helpers;
 using EssentialLayers.Request.Services.Http.Models;
 using System;
 using System.Collections.Generic;
@@ -22,14 +23,18 @@ namespace EssentialLayers.Request.Services.Http
 			}
 		);
 
-		private HttpRequestOption HttpRequestOption = new()
+		private HttpOption HttpOption = new()
 		{
 			AppName = "AppName",
-			AppVersion = "1.0",
-			BearerToken = string.Empty
+			AppVersion = "1.0"
 		};
 
 		/**/
+
+		public void SetOptions(HttpOption httpOption)
+		{
+			HttpOption = httpOption;
+		}
 
 		public async Task<HttpResponse<TResult>> GetAsync<TResult, TRequest>(
 			TRequest request, string url, RequestOptions? options = null
@@ -77,7 +82,7 @@ namespace EssentialLayers.Request.Services.Http
 				options ??= new RequestOptions();
 
 				HttpClient.DefaultRequestHeaders.UserAgent.ParseAdd(
-					$"{HttpRequestOption.AppName}/{HttpRequestOption.AppVersion}"
+					$"{HttpOption.AppName}/{HttpOption.AppVersion}"
 				);
 
 				foreach (KeyValuePair<string, string> header in options.Headers!)
@@ -86,7 +91,7 @@ namespace EssentialLayers.Request.Services.Http
 				}
 
 				string jsonRequest = request.Serialize();
-				string bearerToken = HttpRequestOption.BearerToken.NotEmpty() ? HttpRequestOption.BearerToken : options.BearerToken;
+				string bearerToken = options.BearerToken.NotEmpty() ? options.BearerToken : string.Empty;
 
 				Debug.WriteLine(
 					$"HttpService -> Request Method [{httpMethod.Method}]: URL [ {url} ], JSON [ {jsonRequest} ] "
@@ -135,54 +140,13 @@ namespace EssentialLayers.Request.Services.Http
 					$"HttpService -> Response Method [{httpMethod.Method}]: URL [ {url} ], JSON [ {jsonResponse} ] "
 				);
 
-				return ManageResponse<TResult>(httpResponseMessage.StatusCode, response);
+				return HttpHelper.ManageResponse<TResult>(
+					httpResponseMessage.StatusCode, response, HttpOption.CastResultAsResultHelper
+				);
 			}
 			catch (Exception e)
 			{
 				return HttpResponse<TResult>.Fail(e, HttpStatusCode.InternalServerError);
-			}
-		}
-
-		private static HttpResponse<TResult> ManageResponse<TResult>(
-			HttpStatusCode httpStatusCode, string response
-		)
-		{
-			switch (httpStatusCode)
-			{
-				case HttpStatusCode.OK:
-				case HttpStatusCode.BadRequest:
-
-					TResult? result = response.Deserialize<TResult>();
-
-					return HttpResponse<TResult>.Success(result, httpStatusCode);
-
-				case HttpStatusCode.InternalServerError:
-
-					return HttpResponse<TResult>.Fail(
-						$"There server has returned the next error {response}", httpStatusCode
-					);
-
-				case HttpStatusCode.NotFound:
-
-					return HttpResponse<TResult>.Fail(
-						"The request method not found", httpStatusCode
-					);
-
-				case HttpStatusCode.ServiceUnavailable:
-
-					return HttpResponse<TResult>.Fail(
-						"The server is unavailable", httpStatusCode
-					);
-
-				case HttpStatusCode.Forbidden:
-
-					return HttpResponse<TResult>.Fail(
-						"The request is forbidden", httpStatusCode
-					);
-
-				default:
-
-					return HttpResponse<TResult>.Fail(response.Serialize(), httpStatusCode);
 			}
 		}
 	}

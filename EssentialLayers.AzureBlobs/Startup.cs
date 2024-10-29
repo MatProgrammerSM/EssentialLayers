@@ -20,7 +20,8 @@ namespace EssentialLayers.AzureBlobs
 			this IServiceProvider provider, string connectionString
 		)
 		{
-			IAzureBlobService service = provider.GetRequiredService<IAzureBlobService>();
+			using IServiceScope scope = provider.GetRequiredService<IServiceScopeFactory>().CreateScope();
+			IAzureBlobService service = scope.ServiceProvider.GetRequiredService<IAzureBlobService>();
 
 			service.SetConnectionString(connectionString);
 

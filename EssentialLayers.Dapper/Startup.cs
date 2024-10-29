@@ -1,4 +1,6 @@
-﻿using EssentialLayers.Dapper.Services.Procedure;
+﻿using EssentialLayers.Dapper.Helpers;
+using EssentialLayers.Dapper.Services.Connection;
+using EssentialLayers.Dapper.Services.Procedure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
@@ -12,19 +14,22 @@ namespace EssentialLayers.Dapper
 		)
 		{
 			services.TryAddScoped<IProcedureService, ProcedureService>();
+			services.TryAddSingleton<IConnectionService, ConnectionService>();
 
 			return services;
 		}
 
-		public static IProcedureService ConfigureDapper(
+		public static IServiceProvider ConfigureDapper(
 			this IServiceProvider provider, string connectionString
 		)
 		{
-			IProcedureService service = provider.GetRequiredService<IProcedureService>();
+			IConnectionService service = provider.GetRequiredService<IConnectionService>();
 
-			service.SetConnectionString(connectionString);
+			Tools.Init(provider);
 
-			return service;
+			service.Set(connectionString);
+			
+			return provider;
 		}
 	}
 }

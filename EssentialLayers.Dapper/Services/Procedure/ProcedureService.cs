@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using EssentialLayers.Dapper.Extension;
+using EssentialLayers.Dapper.Helpers;
 using EssentialLayers.Helpers.Extension;
 using EssentialLayers.Helpers.Result;
 using Microsoft.Data.SqlClient;
@@ -14,16 +15,16 @@ namespace EssentialLayers.Dapper.Services.Procedure
 {
 	internal class ProcedureService : IProcedureService
 	{
-		private string ConnectionString = string.Empty;
+		private readonly string ConnectionString = string.Empty;
 
-		/**/
+        /**/
 
-		public void SetConnectionString(string connectionString)
-		{
-			ConnectionString = connectionString;
-		}
+        public ProcedureService()
+        {
+			ConnectionString = Tools.Get.ConnectionService!.Get();
+        }
 
-		public ResultHelper<TResult> Execute<TResult, TRequest>(
+        public ResultHelper<TResult> Execute<TResult, TRequest>(
 			TRequest request, string storedProcedure
 		)
 		{

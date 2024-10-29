@@ -6,7 +6,7 @@
 		<Nullable>enable</Nullable>
 		<PackageId>$(AssemblyName)</PackageId>
 		<Title>$(AssemblyName)</Title>
-		<Version>1.0.0</Version>
+		<Version>1.0.2</Version>
 		<Authors>MSoto</Authors>
 		<Company>Mario Soto Moreno Co</Company>
 		<Description>EssentialLayers.Request is a complement to the package `EssentialLayers` to provide an extra layer for using http requests in an easy way.</Description>
@@ -17,7 +17,7 @@
 		<RepositoryUrl>https://github.com/MatProgrammerSM/EssentialLayers</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Request Http Delete Get Post Put</PackageTags>
-		<PackageReleaseNotes>New service to work with Http Request</PackageReleaseNotes>
+		<PackageReleaseNotes>It's added "CastResultAsResultHelper" parameter at HttpOption model in HttpService</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>

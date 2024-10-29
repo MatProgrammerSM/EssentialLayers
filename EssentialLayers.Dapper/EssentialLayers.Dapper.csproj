@@ -4,7 +4,7 @@
 		<LangVersion>12.0</LangVersion>
 		<Nullable>enable</Nullable>
 		<Title>$(AssemblyName)</Title>
-		<Version>1.1.0</Version>
+		<Version>1.1.4</Version>
 		<Authors>MSoto</Authors>
 		<Company>Mario Soto Moreno Co</Company>
 		<Description>EssentialLayers.Dapper is a complement to the package EssentialLayers to offer an extra layer with the ORM dapper in an easy way, where the main purpose will be, write the business logic in the "stored procedures" using templates that receiving input parameters and return a result set, Currently is just compatible with SQL Server.</Description>
@@ -15,7 +15,7 @@
 		<RepositoryUrl>https://github.com/MatProgrammerSM/EssentialLayers</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Dapper Database MicroORM Helpers</PackageTags>
-		<PackageReleaseNotes>New service to work with micro ORM dapper</PackageReleaseNotes>
+		<PackageReleaseNotes>Fixed error: "The connection string wasn't initilized yet"</PackageReleaseNotes>
 	</PropertyGroup>
 	<ItemGroup>
 	  <None Include="..\shared\essential-layers.png">
