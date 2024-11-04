@@ -1,6 +1,7 @@
 ﻿using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using EssentialLayers.AzureBlobs.Helpers;
 using EssentialLayers.Helpers.Extension;
 using EssentialLayers.Helpers.Result;
 using System;
@@ -17,13 +18,13 @@ namespace EssentialLayers.AzureBlobs.Services.Blob
 
 		private string? ConnectionString;
 
-		public void SetConnectionString(string connectionString)
-		{
-			ConnectionString = connectionString;
-			BlobServiceClient = new(connectionString);
+        public AzureBlobService()
+        {
+			ConnectionString = Tools.Get.ConnectionService!.Get();
+			BlobServiceClient = new(ConnectionString);
 		}
 
-		public async Task<ResultHelper<string>> UploadFileAsync(
+        public async Task<ResultHelper<string>> UploadFileAsync(
 			string fileName, string container, byte[] bytes
 		)
 		{

@@ -1,4 +1,6 @@
-﻿using EssentialLayers.AzureBlobs.Services.Blob;
+﻿using EssentialLayers.AzureBlobs.Helpers;
+using EssentialLayers.AzureBlobs.Services.Blob;
+using EssentialLayers.AzureBlobs.Services.Connection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
@@ -12,19 +14,22 @@ namespace EssentialLayers.AzureBlobs
 		)
 		{
 			services.TryAddScoped<IAzureBlobService, AzureBlobService>();
+			services.TryAddSingleton<IConnectionService, ConnectionService>();
 
 			return services;
 		}
 
-		public static IAzureBlobService ConfigureAzureBlobs(
+		public static IServiceProvider ConfigureAzureBlobs(
 			this IServiceProvider provider, string connectionString
 		)
 		{
-			IAzureBlobService service = provider.GetRequiredService<IAzureBlobService>();
+			IConnectionService service = provider.GetRequiredService<IConnectionService>();
 
-			service.SetConnectionString(connectionString);
+			Tools.Init(provider);
 
-			return service;
+			service.Set(connectionString);
+
+			return provider;
 		}
 	}
 }

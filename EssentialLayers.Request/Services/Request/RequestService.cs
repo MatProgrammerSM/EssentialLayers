@@ -4,16 +4,14 @@ using EssentialLayers.Request.Services.Http.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using RequestOptions = EssentialLayers.Request.Services.Http.Models.RequestOptions;
 
-namespace EssentialLayers.Request.Services.Http
+namespace EssentialLayers.Request.Services.Request
 {
-	internal class HttpService : IHttpService
+	internal class RequestService : IRequestService
 	{
 		private readonly HttpClient HttpClient = new(
 			new HttpClientHandler
@@ -30,48 +28,43 @@ namespace EssentialLayers.Request.Services.Http
 
 		/**/
 
-		public async Task<HttpResponse<TResult>> DeleteAsync<TResult, TRequest>(
+		public async Task<HttpResponseMessage> DeleteAsync<TRequest>(
 			TRequest request, string url, RequestOptions? options = null
 		)
 		{
-			return await SendAsync<TResult, TRequest>(
+			return await SendAsync(
 				request, url, HttpMethod.Delete, options
 			);
 		}
 
-		public async Task<HttpResponse<TResult>> GetAsync<TResult, TRequest>(
+		public async Task<HttpResponseMessage> GetAsync<TRequest>(
 			TRequest request, string url, RequestOptions? options = null
 		)
 		{
-			return await SendAsync<TResult, TRequest>(
+			return await SendAsync(
 				request, url, HttpMethod.Get, options
 			);
 		}
 
-		public async Task<HttpResponse<TResult>> PostAsync<TResult, TRequest>(
+		public async Task<HttpResponseMessage> PostAsync<TRequest>(
 			TRequest request, string url, RequestOptions? options = null
 		)
 		{
-			return await SendAsync<TResult, TRequest>(
+			return await SendAsync(
 				request, url, HttpMethod.Post, options
 			);
 		}
 
-		public async Task<HttpResponse<TResult>> PutAsync<TResult, TRequest>(
+		public async Task<HttpResponseMessage> PutAsync<TRequest>(
 			TRequest request, string url, RequestOptions? options = null
 		)
 		{
-			return await SendAsync<TResult, TRequest>(
+			return await SendAsync(
 				request, url, HttpMethod.Put, options
 			);
 		}
 
-		public void SetOptions(HttpOption httpOption)
-		{
-			HttpOption = httpOption;
-		}
-
-		private async Task<HttpResponse<TResult>> SendAsync<TResult, TRequest>(
+		private async Task<HttpResponseMessage> SendAsync<TRequest>(
 			TRequest request, string url, HttpMethod httpMethod,
 			RequestOptions? options
 		)
@@ -119,7 +112,7 @@ namespace EssentialLayers.Request.Services.Http
 				{
 					string key = request.Serialize();
 
-					httpResponseMessage = await CacheHelper<TResult>.HttpResponseMessage.GetOrCreate(
+					httpResponseMessage = await CacheHelper<HttpResponseMessage>.HttpResponseMessage.GetOrCreate(
 						key, async () => await HttpClient.SendAsync(
 							httpRequestMessage, options.CancellationToken
 						)
@@ -139,13 +132,15 @@ namespace EssentialLayers.Request.Services.Http
 					$"HttpService -> Response Method [{httpMethod.Method}]: URL [ {url} ], JSON [ {jsonResponse} ] "
 				);
 
-				return HttpHelper.ManageResponse<TResult>(
-					httpResponseMessage.StatusCode, response, HttpOption.CastResultAsResultHelper
-				);
+				return httpResponseMessage;
 			}
 			catch (Exception e)
 			{
-				return HttpResponse<TResult>.Fail(e, HttpStatusCode.InternalServerError);
+				Debug.WriteLine(
+					$"Error -> Response Method [{httpMethod.Method}]: URL [ {url} ], JSON [ {e.Message} ] "
+				);
+
+				return null!;
 			}
 		}
 	}

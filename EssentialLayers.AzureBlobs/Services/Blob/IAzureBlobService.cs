@@ -7,8 +7,6 @@ namespace EssentialLayers.AzureBlobs.Services.Blob;
 
 public interface IAzureBlobService
 {
-	void SetConnectionString(string connectionString);
-
 	Task<ResultHelper<string>> UploadFileAsync(
 		string fileName, string container, byte[] bytes
 	);

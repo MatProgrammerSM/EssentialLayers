@@ -1,10 +1,13 @@
-﻿using EssentialLayers.Request.Services.Http.Models;
+﻿using EssentialLayers.Request.Helpers;
+using EssentialLayers.Request.Services.Http.Models;
 using System.Threading.Tasks;
 
 namespace EssentialLayers.Request.Services.Http
 {
-	public interface IHttpService
+    public interface IHttpService
 	{
+		void SetOptions(HttpOption httpOption);
+
 		Task<HttpResponse<TResult>> GetAsync<TResult, TRequest>(
 			TRequest request, string url, RequestOptions? options = null
 		);

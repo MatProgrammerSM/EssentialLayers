@@ -5,17 +5,17 @@ namespace EssentialLayers.Request.Services.Http.Models
 {
 	public class RequestOptions
 	{
-        public RequestOptions() { }
+		public RequestOptions() { }
 
-        public RequestOptions(IDictionary<string, string> headers)
-        {
-            Headers = headers;
-        }
+		public RequestOptions(IDictionary<string, string> headers)
+		{
+			Headers = headers;
+		}
 
-        public RequestOptions(bool isCached = false)
-        {
+		public RequestOptions(bool isCached = false)
+		{
 			IsCached = isCached;
-        }
+		}
 
 		public RequestOptions(string bearerToken)
 		{

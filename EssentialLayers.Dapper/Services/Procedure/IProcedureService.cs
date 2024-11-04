@@ -6,8 +6,6 @@ namespace EssentialLayers.Dapper.Services.Procedure
 {
 	public interface IProcedureService
 	{
-		void SetConnectionString(string connectionString);
-
 		ResultHelper<TResult> Execute<TResult, TRequest>(
 			TRequest request, string storedProcedure
 		);

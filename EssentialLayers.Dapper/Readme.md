@@ -11,6 +11,7 @@ Add the dependencies in your **Program.cs** file
 ```
 builder.Services.UseDapper();
 ```
+
 And then set the connection string
 
 ```

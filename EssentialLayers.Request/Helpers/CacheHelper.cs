@@ -1,5 +1,4 @@
 ﻿using EssentialLayers.Helpers.Cache;
-using EssentialLayers.Request.Services.Http;
 using System.Net.Http;
 
 namespace EssentialLayers.Request.Helpers
