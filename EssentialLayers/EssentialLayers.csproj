@@ -13,9 +13,9 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Result-Handling Cache Error-Handling Helpers JWT-Token Exstension</PackageTags>
 		<PackageReadmeFile>Readme.md</PackageReadmeFile>
-		<Version>1.3.0</Version>
+		<Version>1.3.1</Version>
 		<Title>$(AssemblyName)</Title>
-		<PackageReleaseNotes>It was uncoupled Azure Blobs &amp; HttpWebService to a new packages called EssentialLayers.AzureBlobs &amp; EssentialLayers.Request</PackageReleaseNotes>
+		<PackageReleaseNotes>It was removed AzureBlob package + Update versión of JWT Token package</PackageReleaseNotes>
 		<Authors>MSoto</Authors>
 	</PropertyGroup>
 
@@ -27,11 +27,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Azure.Storage.Blobs" Version="12.22.2" />
 		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.1" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
-		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.1.2" />
-		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.1.2" />
+		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.2.0" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.2.0" />
 	</ItemGroup>
 
 	<ItemGroup>

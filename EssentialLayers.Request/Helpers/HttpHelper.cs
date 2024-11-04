@@ -2,7 +2,7 @@
 using EssentialLayers.Helpers.Result;
 using System.Net;
 
-namespace EssentialLayers.Request.Services.Helpers
+namespace EssentialLayers.Request.Helpers
 {
 	internal static class HttpHelper
 	{

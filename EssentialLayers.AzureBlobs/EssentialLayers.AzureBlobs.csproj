@@ -5,7 +5,7 @@
 		<LangVersion>12.0</LangVersion>
 		<Nullable>enable</Nullable>
 		<Title>$(AssemblyName)</Title>
-		<Version>1.0.2</Version>
+		<Version>1.0.3</Version>
 		<Authors>MSoto</Authors>
 		<Company>Mario Soto Moreno Co</Company>
 		<Product>$(AssemblyName)</Product>
@@ -17,7 +17,7 @@
 		<RepositoryUrl>https://github.com/MatProgrammerSM/EssentialLayershttps://github.com/MatProgrammerSM/EssentialLayers</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Azure Blobs Upload Dowload Delete</PackageTags>
-		<PackageReleaseNotes>Fixed error: "System.InvalidOperationException: 'Cannot resolve scoped service 'EssentialLayers.AzureBlobs.Services.Blob.IAzureBlobService' from root provider.'"</PackageReleaseNotes>
+		<PackageReleaseNotes>It was added ConnectionString  as a singleton service + Updated libraries</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -28,7 +28,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="EssentialLayers" Version="1.3.0" />
+		<PackageReference Include="Azure.Storage.Blobs" Version="12.22.2" />
+		<PackageReference Include="EssentialLayers" Version="1.3.1" />
 	</ItemGroup>
 
 	<ItemGroup>

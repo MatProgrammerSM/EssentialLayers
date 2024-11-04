@@ -1,10 +1,10 @@
-﻿using EssentialLayers.Request.Services.Helpers;
+﻿using EssentialLayers.Request.Helpers;
 using EssentialLayers.Request.Services.Http.Models;
 using System.Threading.Tasks;
 
 namespace EssentialLayers.Request.Services.Http
 {
-	public interface IHttpService
+    public interface IHttpService
 	{
 		void SetOptions(HttpOption httpOption);
 
