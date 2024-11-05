@@ -1,12 +1,14 @@
 ﻿using EssentialLayers.Request.Helpers;
-using EssentialLayers.Request.Services.Http.Models;
+using EssentialLayers.Request.Models;
 using System.Threading.Tasks;
 
 namespace EssentialLayers.Request.Services.Http
 {
     public interface IHttpService
 	{
-		void SetOptions(HttpOption httpOption);
+		Task<HttpResponse<TResult>> DeleteAsync<TResult, TRequest>(
+			TRequest request, string url, RequestOptions? options = null
+		);
 
 		Task<HttpResponse<TResult>> GetAsync<TResult, TRequest>(
 			TRequest request, string url, RequestOptions? options = null
@@ -20,8 +22,6 @@ namespace EssentialLayers.Request.Services.Http
 			TRequest request, string url, RequestOptions? options = null
 		);
 
-		Task<HttpResponse<TResult>> DeleteAsync<TResult, TRequest>(
-			TRequest request, string url, RequestOptions? options = null
-		);
+		void SetOptions(HttpOption httpOption);
 	}
 }

@@ -1,19 +1,20 @@
 ﻿using EssentialLayers.Helpers.Extension;
+using EssentialLayers.Helpers.Result;
 using EssentialLayers.Request.Helpers;
-using EssentialLayers.Request.Services.Http.Models;
+using EssentialLayers.Request.Helpers.Estension;
+using EssentialLayers.Request.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
-using RequestOptions = EssentialLayers.Request.Services.Http.Models.RequestOptions;
+using RequestOptions = EssentialLayers.Request.Models.RequestOptions;
 
 namespace EssentialLayers.Request.Services.Http
 {
-	internal class HttpService : IHttpService
+    internal class HttpService : IHttpService
 	{
 		private readonly HttpClient HttpClient = new(
 			new HttpClientHandler
@@ -91,6 +92,11 @@ namespace EssentialLayers.Request.Services.Http
 
 				string jsonRequest = request.Serialize();
 				string bearerToken = options.BearerToken.NotEmpty() ? options.BearerToken : string.Empty;
+				ResultHelper<HttpContent> contentResult = request.ToHttpContent(options.ContentType);
+
+				if (contentResult.Ok.False()) return HttpResponse<TResult>.Fail(
+					contentResult.Message, HttpStatusCode.InternalServerError
+				);
 
 				Debug.WriteLine(
 					$"HttpService -> Request Method [{httpMethod.Method}]: URL [ {url} ], JSON [ {jsonRequest} ] "
@@ -98,13 +104,13 @@ namespace EssentialLayers.Request.Services.Http
 
 				using HttpRequestMessage httpRequestMessage = new()
 				{
-					Content = new StringContent(jsonRequest, Encoding.UTF8),
+					Content = contentResult.Data,
 					RequestUri = new Uri(url),
 					Method = httpMethod
 				};
 
-				httpRequestMessage.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
-				httpRequestMessage.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
+				httpRequestMessage.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(options.ContentType);
+				httpRequestMessage.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse(options.ContentType));
 
 				if (bearerToken.NotEmpty())
 				{

@@ -1,4 +1,4 @@
-﻿namespace EssentialLayers.Request.Services.Http.Models
+﻿namespace EssentialLayers.Request.Models
 {
 	public class HttpOption
 	{
