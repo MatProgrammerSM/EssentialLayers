@@ -20,13 +20,13 @@ namespace EssentialLayers.Images.Helpers.Extension
 			return qRCode.GetGraphic(pixelsPerModule);
 		}
 
-		public static string ToBase64(
-			this string self, int pixelsPerModule = 2, ECCLevel correctionLevel = ECCLevel.M
+		public static Bitmap ToBarCodeBitMap(
+			this string text, Size size, ImageFormat format
 		)
 		{
-			byte[] bytes = ToBytes(self, pixelsPerModule, correctionLevel);
+			Image image = ToImage(text, format);
 
-			return Convert.ToBase64String(bytes);
+			return new Bitmap(image, size);
 		}
 
 		public static Image ToImage(
@@ -44,13 +44,22 @@ namespace EssentialLayers.Images.Helpers.Extension
 			return Image.FromStream(memoryStream);
 		}
 
-		public static Bitmap ToBarCodeBitMap(
-			this string text, Size size, ImageFormat format
+		public static Stream ToStream(
+			this string self, int pixelsPerModule = 2, ECCLevel correctionLevel = ECCLevel.M
 		)
 		{
-			Image image = ToImage(text, format);
+			byte[] bytes = ToBytes(self, pixelsPerModule, correctionLevel);
 
-			return new Bitmap(image, size);
+			return new MemoryStream(bytes);
+		}
+
+		public static string ToBase64(
+			this string self, int pixelsPerModule = 2, ECCLevel correctionLevel = ECCLevel.M
+		)
+		{
+			byte[] bytes = ToBytes(self, pixelsPerModule, correctionLevel);
+
+			return Convert.ToBase64String(bytes);
 		}
 	}
 }

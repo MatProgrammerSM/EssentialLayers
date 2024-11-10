@@ -14,7 +14,7 @@ using RequestOptions = EssentialLayers.Request.Models.RequestOptions;
 
 namespace EssentialLayers.Request.Services.Http
 {
-    internal class HttpService : IHttpService
+	internal class HttpService : IHttpService
 	{
 		private readonly HttpClient HttpClient = new(
 			new HttpClientHandler
@@ -89,6 +89,8 @@ namespace EssentialLayers.Request.Services.Http
 				{
 					HttpClient.DefaultRequestHeaders.Add(header.Key, header.Value);
 				}
+
+				if(options.BaseUri.NotEmpty()) HttpClient.BaseAddress = new Uri(options.BaseUri);
 
 				string jsonRequest = request.Serialize();
 				string bearerToken = options.BearerToken.NotEmpty() ? options.BearerToken : string.Empty;

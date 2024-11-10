@@ -31,5 +31,7 @@ namespace EssentialLayers.Request.Models
 		public string BearerToken { get; set; } = string.Empty;
 
 		public string ContentType { get; set; } = "application/json";
+
+		public string BaseUri { get; set; } = string.Empty;
 	}
 }

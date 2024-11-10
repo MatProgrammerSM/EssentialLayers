@@ -6,6 +6,8 @@
 
 		public string AppVersion { get; set; } = "1.0";
 
+		public string BaseUri { get; set; } = string.Empty;
+
 		public bool CastResultAsResultHelper { get; set; } = false;
 	}
 }
