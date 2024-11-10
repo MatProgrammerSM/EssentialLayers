@@ -4,20 +4,18 @@
 		<TargetFramework>netstandard2.1</TargetFramework>
 		<LangVersion>12.0</LangVersion>
 		<Nullable>enable</Nullable>
-		<PackageId>$(AssemblyName)</PackageId>
-		<Title>$(AssemblyName)</Title>
-		<Version>1.1.1</Version>
-		<Authors>MSoto</Authors>
+		<Version>1.0.1</Version>
 		<Company>Mario Soto Moreno Co</Company>
-		<Description>EssentialLayers.Request is a complement to the package `EssentialLayers` to provide an extra layer for using http requests in an easy way.</Description>
+		<Authors>MSoto</Authors>
+		<Description>EssentialLayers.Images is a complement to the package `EssentialLayers` to provide an extra layer for using extension &amp; helpers of images in an easy way.</Description>
 		<Copyright>mariosotomor.dev@gmail.com</Copyright>
 		<PackageProjectUrl>https://essentiallayers.dev</PackageProjectUrl>
 		<PackageIcon>essential-layers.png</PackageIcon>
 		<PackageReadmeFile>Readme.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/MatProgrammerSM/EssentialLayers</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>Request Http Delete Get Post Put</PackageTags>
-		<PackageReleaseNotes>It was added a content type in a Request and changed the models location + Fixed reponse issue</PackageReleaseNotes>
+		<PackageTags>QR Image</PackageTags>
+		<PackageReleaseNotes>New result Stream method to Qr code</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -28,15 +26,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="EssentialLayers" Version="1.3.1" />
+		<PackageReference Include="QRCoder" Version="1.6.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <None Update="Readme.md">
-	    <PackagePath>\</PackagePath>
-	    <Pack>True</Pack>
-	  </None>
-	  <None Update="Services\Http\Readme.md">
 	    <PackagePath>\</PackagePath>
 	    <Pack>True</Pack>
 	  </None>

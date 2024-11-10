@@ -1,17 +1,18 @@
 ﻿using EssentialLayers.Helpers.Extension;
+using EssentialLayers.Helpers.Result;
 using EssentialLayers.Request.Helpers;
-using EssentialLayers.Request.Services.Http.Models;
+using EssentialLayers.Request.Helpers.Estension;
+using EssentialLayers.Request.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace EssentialLayers.Request.Services.Request
 {
-	internal class RequestService : IRequestService
+    internal class RequestService : IRequestService
 	{
 		private readonly HttpClient HttpClient = new(
 			new HttpClientHandler
@@ -84,6 +85,7 @@ namespace EssentialLayers.Request.Services.Request
 
 				string jsonRequest = request.Serialize();
 				string bearerToken = options.BearerToken.NotEmpty() ? options.BearerToken : string.Empty;
+				ResultHelper<HttpContent> contentResult = request.ToHttpContent(options.ContentType);
 
 				Debug.WriteLine(
 					$"HttpService -> Request Method [{httpMethod.Method}]: URL [ {url} ], JSON [ {jsonRequest} ] "
@@ -91,13 +93,13 @@ namespace EssentialLayers.Request.Services.Request
 
 				using HttpRequestMessage httpRequestMessage = new()
 				{
-					Content = new StringContent(jsonRequest, Encoding.UTF8),
+					Content = contentResult.Data,
 					RequestUri = new Uri(url),
 					Method = httpMethod
 				};
 
-				httpRequestMessage.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
-				httpRequestMessage.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
+				httpRequestMessage.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(options.ContentType);
+				httpRequestMessage.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse(options.ContentType));
 
 				if (bearerToken.NotEmpty())
 				{
@@ -142,6 +144,11 @@ namespace EssentialLayers.Request.Services.Request
 
 				return null!;
 			}
+		}
+
+		public void SetOptions(HttpOption httpOption)
+		{
+			HttpOption = httpOption;
 		}
 	}
 }

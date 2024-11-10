@@ -12,6 +12,5 @@ It can be used for multiple projects in the **.NET** environment, that is, mobil
 | [Cache](/EssentialLayers/Helpers/Cache) | The quickest way to implement cache. |
 | [Extension](EssentialLayers/Helpers/Extension) | List of methods clasified by data type to extends the functionality and make language more readable. |
 | [Logger](/EssentialLayers/Helpers/Logger) | manage the essential methods at the app logger. |
-| [Token](/EssentialLayers/Services/Token) | To the creation of JWT tokens from a eassier way. |
 
 Created by [Mario Soto Moreno](https://github.com/MatProgrammerSM)

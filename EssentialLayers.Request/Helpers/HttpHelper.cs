@@ -17,12 +17,6 @@ namespace EssentialLayers.Request.Helpers
 
 					if (castAsResultHelper)
 					{
-						TResult? result = response.Deserialize<TResult>();
-
-						return HttpResponse<TResult>.Success(result, httpStatusCode);
-					}
-					else
-					{
 						ResultHelper<TResult> resultHelper = response.Deserialize<ResultHelper<TResult>>();
 
 						if (resultHelper.Ok.False()) return HttpResponse<TResult>.Fail(
@@ -31,8 +25,12 @@ namespace EssentialLayers.Request.Helpers
 
 						return HttpResponse<TResult>.Success(resultHelper.Data, httpStatusCode);
 					}
+					else
+					{
+						TResult? result = response.Deserialize<TResult>();
 
-
+						return HttpResponse<TResult>.Success(result, httpStatusCode);
+					}
 
 				case HttpStatusCode.InternalServerError:
 

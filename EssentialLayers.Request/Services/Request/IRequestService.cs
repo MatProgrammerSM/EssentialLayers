@@ -1,10 +1,10 @@
-﻿using EssentialLayers.Request.Services.Http.Models;
+﻿using EssentialLayers.Request.Models;
 using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace EssentialLayers.Request.Services.Request
 {
-	public interface IRequestService
+    public interface IRequestService
 	{
 		Task<HttpResponseMessage> DeleteAsync<TRequest>(
 			TRequest request, string url, RequestOptions? options = null
@@ -21,5 +21,7 @@ namespace EssentialLayers.Request.Services.Request
 		Task<HttpResponseMessage> PutAsync<TRequest>(
 			TRequest request, string url, RequestOptions? options = null
 		);
+
+		void SetOptions(HttpOption httpOption);
 	}
 }

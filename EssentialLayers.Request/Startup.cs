@@ -1,5 +1,5 @@
-﻿using EssentialLayers.Request.Services.Http;
-using EssentialLayers.Request.Services.Http.Models;
+﻿using EssentialLayers.Request.Models;
+using EssentialLayers.Request.Services.Http;
 using EssentialLayers.Request.Services.Request;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -25,8 +25,10 @@ namespace EssentialLayers.Request
 		{
 			using IServiceScope scope = provider.GetRequiredService<IServiceScopeFactory>().CreateScope();
 			IHttpService httpService = scope.ServiceProvider.GetRequiredService<IHttpService>();
+			IRequestService requestService = scope.ServiceProvider.GetRequiredService<IRequestService>();
 
 			httpService.SetOptions(httpOption);
+			requestService.SetOptions(httpOption);
 
 			return provider;
 		}

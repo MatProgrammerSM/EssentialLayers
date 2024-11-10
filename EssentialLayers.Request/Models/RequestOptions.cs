@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 
-namespace EssentialLayers.Request.Services.Http.Models
+namespace EssentialLayers.Request.Models
 {
 	public class RequestOptions
 	{
@@ -29,5 +29,9 @@ namespace EssentialLayers.Request.Services.Http.Models
 		public CancellationToken CancellationToken { get; set; } = default;
 
 		public string BearerToken { get; set; } = string.Empty;
+
+		public string ContentType { get; set; } = "application/json";
+
+		public string BaseUri { get; set; } = string.Empty;
 	}
 }

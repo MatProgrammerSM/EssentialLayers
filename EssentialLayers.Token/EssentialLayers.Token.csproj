@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<LangVersion>12.0</LangVersion>
+		<Nullable>enable</Nullable>
+		<Version>1.0.0</Version>
+		<Company>Mario Soto Moreno Co</Company>
+		<Authors>MSoto</Authors>
+		<Description>EssentialLayers.Token is a complement to the package `EssentialLayers` to provide an extra layer for using extension &amp; helpers of Token in an easy way.</Description>
+		<Copyright>mariosotomor.dev@gmail.com</Copyright>
+		<PackageProjectUrl>https://essentiallayers.dev</PackageProjectUrl>
+		<PackageIcon>essential-layers.png</PackageIcon>
+		<PackageReadmeFile>Readme.md</PackageReadmeFile>
+		<RepositoryUrl>https://github.com/MatProgrammerSM/EssentialLayers</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>Token JWT</PackageTags>
+		<PackageReleaseNotes>New layer "EssentialLayers.Token"</PackageReleaseNotes>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Include="..\shared\essential-layers.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	  <None Include="Readme.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="EssentialLayers" Version="1.4.0" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.2.0" />
+	</ItemGroup>
+
+</Project>
