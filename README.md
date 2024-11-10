@@ -32,3 +32,19 @@ It is a layer to integrate the use of Dapper in your project and add the use of 
 | :- | :- |
 | [Extension](/EssentialLayers.Dapper/Extension) | List of methods to extends the functionality of dapper. |
 | [Procedure](/EssentialLayers.Dapper/Services/Procedure) | List of descriptive methods, to use with stored procedures. |
+
+### [EssentialLayers.Image](/EssentialLayers.Image/Readme.md)
+It is a layer to integrate the use of helpers & extensions related to the use of images for example generation of QRs.
+
+#### Extension
+| Extension | Description |
+| :- | :- |
+| [Extension](/EssentialLayers.Image/Helpers/Extension) | List of methods to extends the generation of QR codes. |
+
+### [EssentialLayers.Token](/EssentialLayers.Token/Readme.md)
+It is a layer to integrate the use of helpers & extensions related to the use of tokens.
+
+#### Helpers
+| Helper | Description |
+| :- | :- |
+| [Helper](/EssentialLayers.Token/Helpers/Jwt) | List of methods to extends the generation of JWT token. |
