@@ -6,6 +6,6 @@ EssentialLayers.Token is a complement to the package `EssentialLayers` to provid
 
 | Helper | Description |
 | :- | :- |
-| [Token](/EssentialLayers/Services/Token) | To the creation of JWT tokens from a eassier way. |
+| [Token](/EssentialLayers.Token/Helpers/Jwt) | To the creation of JWT tokens from a eassier way. |
 
 Created by [Mario Soto Moreno](https://github.com/MatProgrammerSM)
