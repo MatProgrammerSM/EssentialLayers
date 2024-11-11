@@ -23,7 +23,7 @@ namespace EssentialLayers.Helpers.Result
 			{typeof(UnauthorizedAccessException), $"No hay permisos de escritura en archivos"},
 			{typeof(TaskCanceledException), $"La operación no pudo ser completada"},
 			{typeof(InvalidOperationException), $"La llave no se encontró en el diccionario"},
-			{typeof(HttpRequestException), $"La llave no se encontró en el diccionario"}
+			{typeof(HttpRequestException), $"La llave no se encontró en el diccionario"},
 		};
 	}
 }
