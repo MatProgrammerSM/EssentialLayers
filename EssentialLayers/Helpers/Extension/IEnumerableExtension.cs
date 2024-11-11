@@ -11,29 +11,28 @@ namespace EssentialLayers.Helpers.Extension
 			this IEnumerable<T> self, IEnumerable<T> values
 		)
 		{
-			return self.Any(x => x.IsAny(values));
+			return self.Intersect(values).Any();
 		}
 
 		public static bool NotAny<T>(
 			this IEnumerable<T> self, IEnumerable<T> values
 		)
 		{
-			return self.Any(x => x.IsAny(values)).False();
+			return self.Intersect(values).Any().False();
 		}
 
 		public static bool IsAny<T>(
 			this IEnumerable<T> self, params T[] values
 		)
 		{
-			return self.Any(x => x.IsAny(values));
+			return self.Intersect(values).Any();
 		}
 
 		public static bool NotAny<T>(
 			this IEnumerable<T> self, params T[] values
 		)
 		{
-			return self.Any(x => x.IsAny(values));
-
+			return self.Intersect(values).Any().False();
 		}
 
 		public static bool IsEmpty<T>(

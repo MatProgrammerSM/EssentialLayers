@@ -13,9 +13,9 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Result-Handling Cache Error-Handling Helpers Exstension</PackageTags>
 		<PackageReadmeFile>Readme.md</PackageReadmeFile>
-		<Version>1.4.4</Version>
+		<Version>1.4.5</Version>
 		<Title>$(AssemblyName)</Title>
-		<PackageReleaseNotes>Fixed Any &amp; NotAny methods</PackageReleaseNotes>
+		<PackageReleaseNotes>Solved "The requested operation caused a stack overflow" in Any &amp; NotAny for Lists</PackageReleaseNotes>
 		<Authors>MSoto</Authors>
 	</PropertyGroup>
 

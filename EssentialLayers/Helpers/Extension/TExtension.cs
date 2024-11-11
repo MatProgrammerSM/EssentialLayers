@@ -14,28 +14,34 @@ namespace EssentialLayers.Helpers.Extension
 		{
 			if (self == null) return false;
 
-			return values.Any(x => EqualityComparer<T>.Default.Equals(x, self));
+			return new HashSet<T>(values).Contains(self);
 		}
 
 		public static bool NotAny<T>(
 			this T self, IEnumerable<T> values
 		)
 		{
-			return self.IsAny(values).False();
+			if (self == null) return false;
+
+			return new HashSet<T>(values).Contains(self);
 		}
 
 		public static bool IsAny<T>(
 			this T self, params T[] values
 		)
 		{
-			return self.IsAny(values);
+			if (self == null) return false;
+
+			return new HashSet<T>(values).Contains(self);
 		}
 
 		public static bool NotAny<T>(
 			this T self, params T[] values
 		)
 		{
-			return self.IsAny(values).False();
+			if (self == null) return false;
+
+			return new HashSet<T>(values).Contains(self).False();
 		}
 
 		public static T DeepCopy<T>(this T self)
