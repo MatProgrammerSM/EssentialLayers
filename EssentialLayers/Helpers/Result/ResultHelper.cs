@@ -1,4 +1,5 @@
-﻿using EssentialLayers.Helpers.Logger;
+﻿using EssentialLayers.Helpers.Extension;
+using EssentialLayers.Helpers.Logger;
 using System;
 using System.Runtime.CompilerServices;
 
@@ -25,18 +26,15 @@ namespace EssentialLayers.Helpers.Result
 		{
 			Type type = e.GetType();
 
-			if (ErrorMessages.Messages.TryGetValue(type, out string message))
-			{
-				LoggerHelper.Error(
-					e, $" ResultHelper - File: {file} | Member: {member} | Line Number: {lineNumber} - [{e.Message}]"
-				);
-
-				if (message != null) return new ResultHelper<T>(false, message, default!);
-			}
-
-			return new ResultHelper<T>(
-				false, "Ocurrio un error no controlado, contactar al administrador", default!
+			LoggerHelper.Error(
+				e, $" ResultHelper - File: {file} | Member: {member} | Line Number: {lineNumber} - [{e.Message}]"
 			);
+
+			if (ErrorMessages.Messages.TryGetValue(type, out string message) && message.NotNull()) return new ResultHelper<T>(
+				false, message, default!
+			);
+
+			return Fail(e.Message);
 		}
 	}
 }

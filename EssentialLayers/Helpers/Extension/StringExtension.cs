@@ -1,31 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace EssentialLayers.Helpers.Extension
 {
 	public static class StringExtension
 	{
-		public static bool IsAny(this string self, params string[] values)
-		{
-			return values.Any(item => item == self);
-		}
-
-		public static bool IsAny(this string self, IEnumerable<string> values)
-		{
-			return values.Any(item => item == self);
-		}
-
-		public static bool NotAny(this string self, params string[] values)
-		{
-			return values.All(item => item != self);
-		}
-
-		public static bool NotAny(this string self, IEnumerable<string> values)
-		{
-			return values.All(item => item != self);
-		}
-
 		public static bool IsEmpty(this string self)
 		{
 			return string.IsNullOrEmpty(self);
@@ -76,11 +55,6 @@ namespace EssentialLayers.Helpers.Extension
 			}
 
 			return string.Join(separator, result);
-		}
-
-		public static bool ContainsAny(this string self, params string[] values)
-		{
-			return values.Any(value => value.Contains(self));
 		}
 
 		public static bool HasDigits(this string self)

@@ -5,11 +5,6 @@ namespace EssentialLayers.Helpers.Extension
 {
 	public static class IntExtensions
 	{
-		public static bool IsAny(this int self, params int[] values)
-		{
-			return values.Any(value => value == self);
-		}
-
 		public static bool Between(this int self, int start, int end)
 		{
 			return self >= start && self <= end;
@@ -18,11 +13,6 @@ namespace EssentialLayers.Helpers.Extension
 		public static bool NotBetween(this int self, int start, int end)
 		{
 			return self < start && self > end;
-		}
-
-		public static bool NotAny(this int self, params int[] values)
-		{
-			return values.All(value => self != value);
 		}
 
 		public static bool AreAll(this int self, params int[] values)

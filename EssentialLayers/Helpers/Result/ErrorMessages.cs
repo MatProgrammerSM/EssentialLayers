@@ -7,7 +7,7 @@ namespace EssentialLayers.Helpers.Result
 {
 	public sealed class ErrorMessages
 	{
-		public static readonly IDictionary<Type, string> Messages = new Dictionary<Type, string>
+		public static IDictionary<Type, string> Messages = new Dictionary<Type, string>
 		{
 			{typeof(NullReferenceException), $"Hay una referencia de objeto que esta nula"},
 			{typeof(ArgumentNullException), $"Hay un argumento que esta llegando vacio"},
