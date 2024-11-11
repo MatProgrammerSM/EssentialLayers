@@ -7,46 +7,33 @@ namespace EssentialLayers.Helpers.Extension
 {
 	public static class IEnumerableExtension
 	{
-		public static bool IsAny(
-			this object self, IEnumerable<object> values
+		public static bool IsAny<T>(
+			this IEnumerable<T> self, IEnumerable<T> values
 		)
 		{
-			return values.Any(x => x.ToString().Equals(self.ToString()));
+			return self.Any(x => x.IsAny(values));
 		}
 
-		public static bool NotAny(
-			this object self, IEnumerable<object> values
+		public static bool NotAny<T>(
+			this IEnumerable<T> self, IEnumerable<T> values
 		)
 		{
-			return values.Any(x => x.ToString().Equals(self.ToString())).False();
+			return self.Any(x => x.IsAny(values)).False();
 		}
 
-		public static bool IsAny(
-			this object self, List<object> values
+		public static bool IsAny<T>(
+			this IEnumerable<T> self, params T[] values
 		)
 		{
-			return values.Any(x => x.ToString().Equals(self.ToString()));
+			return self.Any(x => x.IsAny(values));
 		}
 
-		public static bool NotAny(
-			this object self, List<object> values
+		public static bool NotAny<T>(
+			this IEnumerable<T> self, params T[] values
 		)
 		{
-			return values.Any(x => x.ToString().Equals(self.ToString())).False();
-		}
+			return self.Any(x => x.IsAny(values));
 
-		public static bool IsAny(
-			this object self, params object[] values
-		)
-		{
-			return values.Any(x => x.ToString().Equals(self.ToString()));
-		}
-
-		public static bool NotAny(
-			this object self, params object[] values
-		)
-		{
-			return values.Any(x => x.ToString().Equals(self.ToString())).False();
 		}
 
 		public static bool IsEmpty<T>(

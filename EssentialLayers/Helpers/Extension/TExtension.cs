@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
@@ -7,10 +8,35 @@ namespace EssentialLayers.Helpers.Extension
 {
 	public static class TExtension
 	{
-		private static readonly JsonSerializerOptions SerializerOptions = new()
+		public static bool IsAny<T>(
+			this T self, IEnumerable<T> values
+		)
 		{
-			PropertyNameCaseInsensitive = true
-		};
+			if (self == null) return false;
+
+			return values.Any(x => EqualityComparer<T>.Default.Equals(x, self));
+		}
+
+		public static bool NotAny<T>(
+			this T self, IEnumerable<T> values
+		)
+		{
+			return self.IsAny(values).False();
+		}
+
+		public static bool IsAny<T>(
+			this T self, params T[] values
+		)
+		{
+			return self.IsAny(values);
+		}
+
+		public static bool NotAny<T>(
+			this T self, params T[] values
+		)
+		{
+			return self.IsAny(values).False();
+		}
 
 		public static T DeepCopy<T>(this T self)
 		{
@@ -26,14 +52,17 @@ namespace EssentialLayers.Helpers.Extension
 			}
 		}
 
-		public static string Serialize<T>(this T self, bool ident = false)
+		public static string Serialize<T>(
+			this T self, bool indented = false, bool insensitive = false
+		)
 		{
 			try
 			{
 				return JsonSerializer.Serialize(
 					self, new JsonSerializerOptions
 					{
-						WriteIndented = ident,
+						WriteIndented = indented,
+						PropertyNameCaseInsensitive = insensitive
 					}
 				);
 			}
@@ -43,9 +72,24 @@ namespace EssentialLayers.Helpers.Extension
 			}
 		}
 
-		public static T Deserialize<T>(this string self)
+		public static T Deserialize<T>(
+			this string self, bool indented = false, bool insensitive = false
+		)
 		{
-			return JsonSerializer.Deserialize<T>(self, SerializerOptions)!;
+			try
+			{
+				return JsonSerializer.Deserialize<T>(
+					self, new JsonSerializerOptions
+					{
+						WriteIndented = indented,
+						PropertyNameCaseInsensitive = insensitive
+					}
+				)!;
+			}
+			catch (Exception e)
+			{
+				throw new Exception("Error on deserialize object", e);
+			}
 		}
 
 		public static bool IsSimpleType<T>(this T self)
