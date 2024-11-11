@@ -1,17 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace EssentialLayers.Helpers.Extension
 {
 	public static class DecimalExtension
 	{
-		public static bool IsAny(
-			this decimal value, params decimal[] values
-		)
-		{
-			return values.Count(val => val == value) > 0;
-		}
-
 		public static string ToDecimalCurrency(
 			this decimal value, bool isZeroEmpty = false
 		)

@@ -18,7 +18,14 @@ namespace EssentialLayers.Helpers.Extension
 			this char value, params char[] values
 		)
 		{
-			return values.Count(val => val == value) > 0;
+			return values.Any(val => val == value);
+		}
+
+		public static bool NotAny(
+			this char value, params char[] values
+		)
+		{
+			return values.Any(val => val != value);
 		}
 
 		public static bool IsLetter(

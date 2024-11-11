@@ -13,9 +13,9 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Result-Handling Cache Error-Handling Helpers Exstension</PackageTags>
 		<PackageReadmeFile>Readme.md</PackageReadmeFile>
-		<Version>1.4.0</Version>
+		<Version>1.4.2</Version>
 		<Title>$(AssemblyName)</Title>
-		<PackageReleaseNotes>It was removed token because it was created a new layer called "EssentialLayers.Token"</PackageReleaseNotes>
+		<PackageReleaseNotes>Removed estension methods &amp; added Any, NotAny to objects</PackageReleaseNotes>
 		<Authors>MSoto</Authors>
 	</PropertyGroup>
 

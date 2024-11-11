@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
@@ -16,6 +17,26 @@ namespace EssentialLayers.Helpers.Extension
 		public static bool NotAny(this DateTime value, params DateTime[] values)
 		{
 			return values.Any(val => val != value);
+		}
+
+		public static bool IsAny(this DateTime value, IEnumerable<DateTime> values)
+		{
+			return values.Any(val => val == value);
+		}
+
+		public static bool NotAny(this DateTime value, IEnumerable<DateTime> values)
+		{
+			return values.Any(val => val != value);
+		}
+
+		public static bool IsAny(this DateTime value, List<DateTime> values)
+		{
+			return values.Any(val => val == value);
+		}
+
+		public static bool NotAny(this DateTime value, List<DateTime> values)
+		{
+			return values.Any(val => val == value);
 		}
 
 		public static string ToShortFormatMX(this DateTime value, bool bWithSlash = true)
@@ -47,7 +68,7 @@ namespace EssentialLayers.Helpers.Extension
 			return value == 0;
 		}
 
-		public static string EqualsDefaultToEmpty(this DateTime datetime, string date)
+		public static string EqualsEmpty(this DateTime datetime, string date)
 		{
 			int value = DateTime.Compare(DEFAULT, datetime);
 

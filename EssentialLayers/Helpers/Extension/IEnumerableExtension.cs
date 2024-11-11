@@ -7,8 +7,43 @@ namespace EssentialLayers.Helpers.Extension
 {
 	public static class IEnumerableExtension
 	{
+		public static bool IsAny(
+			this object self, IEnumerable<object> values
+		)
+		{
+			return values.Any(x => x.ToString().Equals(self.ToString()));
+		}
+
 		public static bool NotAny(
 			this object self, IEnumerable<object> values
+		)
+		{
+			return values.Any(x => x.ToString().Equals(self.ToString())).False();
+		}
+
+		public static bool IsAny(
+			this object self, List<object> values
+		)
+		{
+			return values.Any(x => x.ToString().Equals(self.ToString()));
+		}
+
+		public static bool NotAny(
+			this object self, List<object> values
+		)
+		{
+			return values.Any(x => x.ToString().Equals(self.ToString())).False();
+		}
+
+		public static bool IsAny(
+			this object self, params object[] values
+		)
+		{
+			return values.Any(x => x.ToString().Equals(self.ToString()));
+		}
+
+		public static bool NotAny(
+			this object self, params object[] values
 		)
 		{
 			return values.Any(x => x.ToString().Equals(self.ToString())).False();
@@ -18,36 +53,27 @@ namespace EssentialLayers.Helpers.Extension
 			this IEnumerable<T> list
 		)
 		{
-			if (list == null)
-			{
-				return true;
-			}
+			if (list == null) return true;
 
 			return list.Any().False();
-		}
-
-		public static bool SingleOne<T>(
-			this IEnumerable<T> list
-		)
-		{
-			if (list == null)
-			{
-				return false;
-			}
-
-			return list.Count() == 1;
 		}
 
 		public static bool NotEmpty<T>(
 			this IEnumerable<T> list
 		)
 		{
-			if (list == null)
-			{
-				return false;
-			}
+			if (list == null) return false;
 
 			return list.Any();
+		}
+
+		public static bool SingleOne<T>(
+			this IEnumerable<T> list
+		)
+		{
+			if (list == null) return false;
+
+			return list.Count() == 1;
 		}
 
 		public static bool AddIf<T>(
