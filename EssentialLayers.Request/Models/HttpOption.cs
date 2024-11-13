@@ -9,5 +9,7 @@
 		public string BaseUri { get; set; } = string.Empty;
 
 		public bool CastResultAsResultHelper { get; set; } = false;
-	}
+
+		public bool InsensitiveMapping { get; set; } = true;
+    }
 }

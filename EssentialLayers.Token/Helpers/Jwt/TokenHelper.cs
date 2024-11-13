@@ -12,7 +12,7 @@ namespace EssentialLayers.Token.Helpers.Jwt
 	{
 		public string Generate(
 			string sub, string secretKey, string issuer,
-			string audience, string algorithm, DateTime expiration, Claim[] extraClaims = null
+			string audience, string algorithm, DateTime expiration, Claim[]? extraClaims = null
 		)
 		{
 			List<Claim> claims =

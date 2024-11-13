@@ -33,5 +33,7 @@ namespace EssentialLayers.Request.Models
 		public string ContentType { get; set; } = "application/json";
 
 		public string BaseUri { get; set; } = string.Empty;
+
+		public bool InsensitiveMapping { get; set; } = true;
 	}
 }
