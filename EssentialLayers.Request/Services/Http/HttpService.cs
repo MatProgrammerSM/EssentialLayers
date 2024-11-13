@@ -80,6 +80,7 @@ namespace EssentialLayers.Request.Services.Http
 			try
 			{
 				options ??= new RequestOptions();
+				bool insensitiveMapping = true;
 
 				HttpClient.DefaultRequestHeaders.UserAgent.ParseAdd(
 					$"{HttpOption.AppName}/{HttpOption.AppVersion}"
@@ -90,7 +91,9 @@ namespace EssentialLayers.Request.Services.Http
 					HttpClient.DefaultRequestHeaders.Add(header.Key, header.Value);
 				}
 
-				if(options.BaseUri.NotEmpty()) HttpClient.BaseAddress = new Uri(options.BaseUri);
+				if (options.BaseUri.NotEmpty()) HttpClient.BaseAddress = new Uri(options.BaseUri);
+
+				if (false.IsAny(options.InsensitiveMapping, HttpOption.InsensitiveMapping)) insensitiveMapping = false;
 
 				string jsonRequest = request.Serialize();
 				string bearerToken = options.BearerToken.NotEmpty() ? options.BearerToken : string.Empty;
@@ -141,6 +144,11 @@ namespace EssentialLayers.Request.Services.Http
 				}
 
 				string response = await httpResponseMessage.Content.ReadAsStringAsync();
+
+				if (httpResponseMessage.IsSuccessStatusCode.False()) return HttpResponse<TResult>.Fail(
+					response, httpResponseMessage.StatusCode
+				);
+
 				string jsonResponse = response.Serialize();
 
 				Debug.WriteLine(
@@ -148,7 +156,7 @@ namespace EssentialLayers.Request.Services.Http
 				);
 
 				return HttpHelper.ManageResponse<TResult>(
-					httpResponseMessage.StatusCode, response, HttpOption.CastResultAsResultHelper
+					httpResponseMessage.StatusCode, response, HttpOption.CastResultAsResultHelper, insensitiveMapping
 				);
 			}
 			catch (Exception e)

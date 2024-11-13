@@ -6,7 +6,7 @@
 		<Nullable>enable</Nullable>
 		<PackageId>$(AssemblyName)</PackageId>
 		<Title>$(AssemblyName)</Title>
-		<Version>1.1.1</Version>
+		<Version>1.1.4</Version>
 		<Authors>MSoto</Authors>
 		<Company>Mario Soto Moreno Co</Company>
 		<Description>EssentialLayers.Request is a complement to the package `EssentialLayers` to provide an extra layer for using http requests in an easy way.</Description>
@@ -17,7 +17,7 @@
 		<RepositoryUrl>https://github.com/MatProgrammerSM/EssentialLayers</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Request Http Delete Get Post Put</PackageTags>
-		<PackageReleaseNotes>It was added a content type in a Request and changed the models location + Fixed reponse issue</PackageReleaseNotes>
+		<PackageReleaseNotes>Solved issue on serialize() &amp; Added insensitiveMapping with default true</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>

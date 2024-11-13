@@ -7,7 +7,7 @@ namespace EssentialLayers.Request.Helpers
 	internal static class HttpHelper
 	{
 		public static HttpResponse<TResult> ManageResponse<TResult>(
-			HttpStatusCode httpStatusCode, string response, bool castAsResultHelper
+			HttpStatusCode httpStatusCode, string response, bool castAsResultHelper, bool insensitiveMapping
 		)
 		{
 			switch (httpStatusCode)
@@ -17,7 +17,7 @@ namespace EssentialLayers.Request.Helpers
 
 					if (castAsResultHelper)
 					{
-						ResultHelper<TResult> resultHelper = response.Deserialize<ResultHelper<TResult>>();
+						ResultHelper<TResult> resultHelper = response.Deserialize<ResultHelper<TResult>>(insensitive: insensitiveMapping);
 
 						if (resultHelper.Ok.False()) return HttpResponse<TResult>.Fail(
 							resultHelper.Message, httpStatusCode
@@ -27,7 +27,7 @@ namespace EssentialLayers.Request.Helpers
 					}
 					else
 					{
-						TResult? result = response.Deserialize<TResult>();
+						TResult? result = response.Deserialize<TResult>(insensitive: insensitiveMapping);
 
 						return HttpResponse<TResult>.Success(result, httpStatusCode);
 					}
