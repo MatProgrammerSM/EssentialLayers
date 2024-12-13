@@ -11,13 +11,25 @@ It can be used for multiple projects in the **.NET** environment, that is, mobil
 ### [EssentialLayers.Request](/EssentialLayers.Request/Readme.md)
 It is a layer that performs the handling of the http service with typical methods, using dependency injection, plus consists of an implementation of results to manage the response.
 
+#### Helpers
+| Helper | Description |
+| :- | :- |
+| [Http](/EssentialLayers.Request/Helpers/Http/) | List of methods to extends the functionality of HttpClient. |
+| [Request](/EssentialLayers.Request/Helpers/Request/) | List of methods to extends the functionality of HttpClient. |
+
 #### Services
 | Service | Description |
 | :- | :- |
-| [Http](/EssentialLayers.Request/Services/Http/Readme.md) | List of methods to extends the functionality of Azure Blobs. |
+| [Http](/EssentialLayers.Request/Services/Http/Readme.md) | List of methods to extends the functionality of HttpClient. |
+| [Request](/EssentialLayers.Request/Services/Request/Readme.md) | List of methods to extends the functionality of HttpClient. |
 
 ### [EssentialLayers.AzureBlobs](/EssentialLayers.AzureBlobs/Readme.md)
 It is a layer that performs the management of the blob service of azure, offers a number of methods to interact with containers where the blobs are stored.
+
+#### Helpers
+| Helpers | Description |
+| :- | :- |
+| [Blobs](/EssentialLayers.AzureBlobs/Helpers/Blob/Readme.md) | List of methods to extends the functionality of Azure Blobs. |
 
 #### Services
 | Service | Description |
