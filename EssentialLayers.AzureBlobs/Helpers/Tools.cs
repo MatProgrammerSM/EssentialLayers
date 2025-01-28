@@ -12,7 +12,7 @@ namespace EssentialLayers.AzureBlobs.Helpers
 
 		/**/
 
-		public IConnectionService? ConnectionService => Services!.GetService<IConnectionService>();
+		public IConnectionService? Connection => Services!.GetService<IConnectionService>();
 
 		/**/
 

@@ -5,19 +5,19 @@
 		<LangVersion>12.0</LangVersion>
 		<Nullable>enable</Nullable>
 		<Title>$(AssemblyName)</Title>
-		<Version>1.0.3</Version>
+		<Version>1.0.5</Version>
 		<Authors>MSoto</Authors>
 		<Company>Mario Soto Moreno Co</Company>
 		<Product>$(AssemblyName)</Product>
-		<Description>EssentialLayers.AzureBlobs is a complement to the package `EssentialLayers` to provide an extra layer to use Azure Blobs in an easy way.</Description>
+		<Description>EssentialLayers.AzureBlobs is a complement to the package EssentialLayers to provide an extra layer to use Azure Blobs in an easy way.</Description>
 		<Copyright>mariosotomor.dev@gmail.com</Copyright>
 		<PackageProjectUrl>https://essentiallayers.dev</PackageProjectUrl>
 		<PackageIcon>essential-layers.png</PackageIcon>
 		<PackageReadmeFile>Readme.md</PackageReadmeFile>
-		<RepositoryUrl>https://github.com/MatProgrammerSM/EssentialLayershttps://github.com/MatProgrammerSM/EssentialLayers</RepositoryUrl>
+		<RepositoryUrl>https://github.com/MatProgrammerSM/EssentialLayers</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Azure Blobs Upload Dowload Delete</PackageTags>
-		<PackageReleaseNotes>It was added ConnectionString  as a singleton service + Updated libraries</PackageReleaseNotes>
+		<PackageReleaseNotes>Now, all methods can be called or used as a BlobServiceHelper passing the connectionString at the constructor</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -33,6 +33,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Update="Helpers\Blob\Readme.md">
+		  <PackagePath>\</PackagePath>
+		  <Pack>True</Pack>
+		</None>
 		<None Update="Readme.md">
 			<PackagePath>\</PackagePath>
 			<Pack>True</Pack>
