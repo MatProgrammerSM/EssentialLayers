@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EssentialLayers.Helpers.Result;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -95,6 +96,50 @@ namespace EssentialLayers.Helpers.Extension
 			catch (Exception e)
 			{
 				throw new Exception("Error on deserialize object", e);
+			}
+		}
+
+		public static ResultHelper<string> SerializeResult<T>(
+			this T self, bool indented = false, bool insensitive = false
+		)
+		{
+			try
+			{
+				string serialized = JsonSerializer.Serialize(
+					self, new JsonSerializerOptions
+					{
+						WriteIndented = indented,
+						PropertyNameCaseInsensitive = insensitive
+					}
+				);
+
+				return ResultHelper<string>.Success(serialized);
+			}
+			catch (Exception e)
+			{
+				return ResultHelper<string>.Fail(e);
+			}
+		}
+
+		public static ResultHelper<T> DeserializeResult<T>(
+			this string self, bool indented = false, bool insensitive = false
+		)
+		{
+			try
+			{
+				T deserialized = JsonSerializer.Deserialize<T>(
+					self, new JsonSerializerOptions
+					{
+						WriteIndented = indented,
+						PropertyNameCaseInsensitive = insensitive
+					}
+				)!;
+
+				return ResultHelper<T>.Success(deserialized);
+			}
+			catch (Exception e)
+			{
+				return ResultHelper<T>.Fail(e);
 			}
 		}
 

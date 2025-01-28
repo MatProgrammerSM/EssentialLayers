@@ -1,47 +1,35 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 
 namespace EssentialLayers.Helpers.Logger
 {
-	public static class LoggerHelper
+	public static class LoggerHelper<T>
 	{
-		public static void Info(string message)
+		private static readonly ILogger<T> _logger;
+
+		public static void Debug(Exception e, string message)
 		{
-			Debug(CategoryAttribute.Info, message);
+			_logger.LogDebug(e, message);
 		}
 
 		public static void Error(Exception e, string message)
 		{
-			Debug(CategoryAttribute.Error, $"\r\nMessage: {message}\r\n{e}");
+			_logger.LogError(e, message);
+		}
+
+		public static void Info(string message)
+		{
+			_logger.LogInformation(message);
+		}
+
+		public static void Trace(Exception e, string message)
+		{
+			_logger.LogTrace(e, message);
 		}
 
 		public static void Warning(string message)
 		{
-			Debug(CategoryAttribute.Warning, message);
-		}
-
-		private static void Debug(CategoryAttribute categoryAttribute, string message)
-		{
-			string category = GetCategory(categoryAttribute);
-
-			System.Diagnostics.Debug.WriteLine(message, category);
-		}
-
-		private static string GetCategory(CategoryAttribute categoryAttribute)
-		{
-			return categoryAttribute switch
-			{
-				CategoryAttribute.Info => " -> Info ",
-				CategoryAttribute.Error => " -> Error ",
-				CategoryAttribute.Warning => " -> Warning ",
-				_ => string.Empty,
-			};
-		}
-
-		private enum CategoryAttribute
-		{
-			Error,
-			Info,
-			Warning
+			_logger.LogWarning(message);
 		}
 	}
 }

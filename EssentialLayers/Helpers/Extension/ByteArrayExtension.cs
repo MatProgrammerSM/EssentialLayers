@@ -38,6 +38,23 @@ namespace EssentialLayers.Helpers.Extension
 			return outStream.ToArray();
 		}
 
+		public static byte[] Decompress(
+			this byte[] self
+		)
+		{
+			using MemoryStream memoryStream = new(self);
+			using ZipArchive zipArchive = new(memoryStream, ZipArchiveMode.Read);
+
+			ZipArchiveEntry entry = zipArchive.Entries[0];
+
+			using Stream entryStream = entry.Open();
+			using MemoryStream memoryStreamOutput = new();
+
+			entryStream.CopyTo(memoryStreamOutput);
+
+			return memoryStreamOutput.ToArray();
+		}
+
 		public static void CompressAndWrite(
 			this byte[] self, string path, string fileName, string extension
 		)

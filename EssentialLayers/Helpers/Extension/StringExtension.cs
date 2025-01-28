@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace EssentialLayers.Helpers.Extension
@@ -134,6 +136,15 @@ namespace EssentialLayers.Helpers.Extension
 			}
 
 			return self;
+		}
+
+		public static Stream ToStream(this string self)
+		{
+			if (self.IsEmpty()) return new MemoryStream();
+
+			byte[] bytes = Encoding.UTF8.GetBytes(self);
+
+			return new MemoryStream(bytes);
 		}
 	}
 }

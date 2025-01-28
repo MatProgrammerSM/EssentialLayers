@@ -13,6 +13,8 @@ namespace EssentialLayers.Helpers.Result
 
 		public T Data { get; set; } = data;
 
+		/**/
+
 		public static ResultHelper<T> Success(T data) => new(true, string.Empty, data);
 
 		public static ResultHelper<T> Fail(string message) => new(false, message, default!);
@@ -26,12 +28,20 @@ namespace EssentialLayers.Helpers.Result
 		{
 			Type type = e.GetType();
 
-			LoggerHelper.Error(
-				e, $" ResultHelper - File: {file} | Member: {member} | Line Number: {lineNumber} - [{e.Message}]"
-			);
-
 			if (ErrorMessages.Messages.TryGetValue(type, out string message) && message.NotNull()) return new ResultHelper<T>(
 				false, message, default!
+			);
+
+			var errorMessage = new
+			{
+				file,
+				member,
+				lineNumber,
+				message
+			};
+
+			LoggerHelper<ResultHelper<T>>.Error(
+				e, errorMessage.Serialize(true)
 			);
 
 			return Fail(e.Message);

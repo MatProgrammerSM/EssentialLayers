@@ -13,4 +13,7 @@ It can be used for multiple projects in the **.NET** environment, that is, mobil
 | [Extension](EssentialLayers/Helpers/Extension) | List of methods clasified by data type to extends the functionality and make language more readable. |
 | [Logger](/EssentialLayers/Helpers/Logger) | manage the essential methods at the app logger. |
 
+#### Release Notes
+ - New compress methods to bytes array and streams `13/01/2025`
+
 Created by [Mario Soto Moreno](https://github.com/MatProgrammerSM)
