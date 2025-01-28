@@ -15,16 +15,16 @@ namespace EssentialLayers.Dapper.Services.Procedure
 {
 	internal class ProcedureService : IProcedureService
 	{
-		private readonly string ConnectionString = string.Empty;
+		private string ConnectionString = string.Empty;
 
-        /**/
+		/**/
 
-        public ProcedureService()
-        {
+		public ProcedureService()
+		{
 			ConnectionString = Tools.Get.ConnectionService!.Get();
-        }
+		}
 
-        public ResultHelper<TResult> Execute<TResult, TRequest>(
+		public ResultHelper<TResult> Execute<TResult, TRequest>(
 			TRequest request, string storedProcedure
 		)
 		{
@@ -416,6 +416,11 @@ namespace EssentialLayers.Dapper.Services.Procedure
 			}
 
 			return result;
+		}
+
+		public void SetConnection(string connectionString)
+		{
+			ConnectionString = connectionString;
 		}
 
 		private ResultHelper<TResult> ValidateConnectionString<TResult>(

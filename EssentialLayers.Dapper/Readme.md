@@ -18,4 +18,7 @@ And then set the connection string
 app.Services.ConfigureDapper(Connection_String);
 ```
 
+#### Release Notes
+ - Added SetConnection to set the runtime value `24/01/2025`
+
 Created by [Mario Soto Moreno](https://github.com/MatProgrammerSM)

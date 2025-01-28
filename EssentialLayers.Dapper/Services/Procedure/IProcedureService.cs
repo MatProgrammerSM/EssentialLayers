@@ -45,5 +45,7 @@ namespace EssentialLayers.Dapper.Services.Procedure
 		Task<ResultHelper<IEnumerable<IEnumerable<dynamic>>>> ExecuteMultipleAsync<TRequest>(
 			TRequest request, string storedProcedure
 		);
+
+		void SetConnection(string connectionString);
 	}
 }
