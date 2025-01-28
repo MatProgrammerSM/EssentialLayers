@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace EssentialLayers.Request.Services.Request
 {
-    public interface IRequestService
+	public interface IRequestService
 	{
 		Task<HttpResponseMessage> DeleteAsync<TRequest>(
 			TRequest request, string url, RequestOptions? options = null

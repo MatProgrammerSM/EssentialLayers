@@ -4,14 +4,14 @@ using System.Threading.Tasks;
 
 namespace EssentialLayers.Request.Services.Http
 {
-    public interface IHttpService
+	public interface IHttpService
 	{
 		Task<HttpResponse<TResult>> DeleteAsync<TResult, TRequest>(
 			TRequest request, string url, RequestOptions? options = null
 		);
 
-		Task<HttpResponse<TResult>> GetAsync<TResult, TRequest>(
-			TRequest request, string url, RequestOptions? options = null
+		Task<HttpResponse<TResult>> GetAsync<TResult>(
+			string url, RequestOptions? options = null
 		);
 
 		Task<HttpResponse<TResult>> PostAsync<TResult, TRequest>(

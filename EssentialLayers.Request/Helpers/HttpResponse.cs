@@ -1,6 +1,5 @@
 ﻿using EssentialLayers.Helpers.Result;
 using System;
-using System.Diagnostics;
 using System.Net;
 
 namespace EssentialLayers.Request.Helpers
@@ -19,7 +18,7 @@ namespace EssentialLayers.Request.Helpers
 			string message, HttpStatusCode httpStatusCode
 		)
 		{
-			Debug.WriteLine(message);
+			GlobalFunctions.Error(message);
 
 			return new(false, message, default!, httpStatusCode);
 		}
@@ -27,6 +26,8 @@ namespace EssentialLayers.Request.Helpers
 		public static HttpResponse<T> Fail(Exception e, HttpStatusCode httpStatusCode)
 		{
 			ResultHelper<T> result = Fail(e);
+
+			GlobalFunctions.Error(e);
 
 			return Fail(result.Message, httpStatusCode);
 		}
